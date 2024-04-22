@@ -1,0 +1,24 @@
+package com.ke.hs
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.navigation.compose.rememberNavController
+import com.ke.hs.ui.navigation.NavigationTree
+import com.ke.hs.ui.theme.HsTheme
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            HsTheme {
+                val navHostController = rememberNavController()
+
+                NavigationTree(controller = navHostController)
+            }
+        }
+    }
+}
+
