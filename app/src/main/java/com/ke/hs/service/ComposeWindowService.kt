@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.SendAndArchive
 import androidx.compose.material.icons.filled.Analytics
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -77,6 +78,8 @@ class ComposeWindowService : LifecycleService(), SavedStateRegistryOwner {
     lateinit var deckCardObserver: DeckCardObserver
 
 
+    private var show = true
+
     private fun showView() {
         val layoutParams = WindowManager.LayoutParams()
         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -104,9 +107,18 @@ class ComposeWindowService : LifecycleService(), SavedStateRegistryOwner {
         composeView.setViewTreeLifecycleOwner(this)
 
         composeView.setContent {
-            FloatingComposeView(deckCardObserver = deckCardObserver, {
+            FloatingComposeView(deckCardObserver = deckCardObserver, exitApp = {
 //                exitProcess(0)
                 stopSelf()
+            }, toggle = {
+                show = !show
+                layoutParams.height = if (show) {
+                    resources.getDimension(R.dimen.module_floating_window_height).toInt()
+                } else {
+                    resources.getDimension(R.dimen.module_floating_window_header_height).toInt()
+
+                }
+                windowManager.updateViewLayout(frameLayout, layoutParams)
             })
         }
 
@@ -151,7 +163,11 @@ class ComposeWindowService : LifecycleService(), SavedStateRegistryOwner {
 }
 
 @Composable
-private fun FloatingComposeView(deckCardObserver: DeckCardObserver, exitApp: () -> Unit) {
+private fun FloatingComposeView(
+    deckCardObserver: DeckCardObserver,
+    exitApp: () -> Unit,
+    toggle: () -> Unit = {}
+) {
 
 
     MaterialTheme {
@@ -192,6 +208,16 @@ private fun FloatingComposeView(deckCardObserver: DeckCardObserver, exitApp: () 
                 }) {
                     Icon(
                         imageVector = Icons.Default.Analytics,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+
+                IconButton(onClick = {
+                    toggle()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Visibility,
                         contentDescription = null,
                         tint = Color.White
                     )
