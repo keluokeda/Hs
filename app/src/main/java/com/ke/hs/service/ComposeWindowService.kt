@@ -25,8 +25,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.SendAndArchive
 import androidx.compose.material.icons.filled.Analytics
+import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -172,6 +176,11 @@ private fun FloatingComposeView(
 
     MaterialTheme {
 
+        var cardListType by remember {
+            mutableStateOf(CardListType.DECK)
+        }
+
+
         var showAnalytics by remember {
             mutableStateOf(false)
         }
@@ -180,18 +189,27 @@ private fun FloatingComposeView(
             mutableStateOf("")
         }
 
-        val cardList by deckCardObserver.deckCardList.collectAsState()
+        val cardList by if (cardListType == CardListType.DECK) {
+            deckCardObserver.deckCardList.collectAsState()
+        } else if (cardListType == CardListType.MY_GRAVEYARD) {
+            deckCardObserver.userGraveyardCardList.collectAsState()
+        } else {
+            deckCardObserver.opponentGraveyardCardList.collectAsState()
+        }
+
 
         Column(modifier = Modifier.fillMaxSize()) {
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(dimensionResource(id = R.dimen.module_floating_window_header_height))
                     .background(
                         Color.Black.copy(
                             alpha = 0.3f
                         )
-                    )
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = exitApp) {
                     Icon(
@@ -222,6 +240,36 @@ private fun FloatingComposeView(
                         tint = Color.White
                     )
                 }
+                Box {
+                    var expanded by remember {
+                        mutableStateOf(false)
+                    }
+                    IconButton(onClick = { expanded = true }) {
+                        Icon(
+                            imageVector = Icons.Default.FilterAlt,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                        DropdownMenuItem(text = { Text(text = "牌库") }, onClick = {
+                            cardListType = CardListType.DECK
+                            expanded = false
+                        })
+                        DropdownMenuItem(text = { Text(text = "自己墓地") }, onClick = {
+                            cardListType = CardListType.MY_GRAVEYARD
+                            expanded = false
+                        })
+
+                        DropdownMenuItem(text = { Text(text = "对手墓地") }, onClick = {
+                            cardListType = CardListType.OPPONENT_GRAVEYARD
+                            expanded = false
+                        })
+
+                    }
+                }
+
+
             }
 
             if (showAnalytics) {
@@ -245,6 +293,10 @@ private fun FloatingComposeView(
         }
     }
 
+}
+
+enum class CardListType {
+    DECK, MY_GRAVEYARD, OPPONENT_GRAVEYARD
 }
 
 @Preview(widthDp = 200)

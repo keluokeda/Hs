@@ -4,8 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -20,13 +24,13 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun SyncRoute(next: () -> Unit) {
+fun SyncRoute(onBack: (() -> Unit)? = null, next: () -> Unit) {
     val viewModel = hiltViewModel<SyncViewModel>()
     val loading by viewModel.loading.collectAsState()
 
     val scope = rememberCoroutineScope()
 
-    SyncScreen(loading = loading) {
+    SyncScreen(loading = loading, onBack = onBack) {
         scope.launch {
             viewModel.sync()
             next()
@@ -36,9 +40,22 @@ fun SyncRoute(next: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SyncScreen(loading: Boolean, sync: () -> Unit) {
+private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: () -> Unit) {
     Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "同步卡牌数据") })
+        TopAppBar(
+            title = { Text(text = "同步卡牌数据") },
+
+            navigationIcon = if (onBack == null) {
+                {}
+            } else {
+                {
+                    IconButton(onClick = onBack) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                }
+
+            }
+        )
     }) { padding ->
         Column(
             modifier = Modifier
@@ -54,4 +71,6 @@ private fun SyncScreen(loading: Boolean, sync: () -> Unit) {
         }
 
     }
+
+
 }

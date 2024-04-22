@@ -62,7 +62,8 @@ class FileService : IFileService.Stub() {
             override fun onServiceDisconnected(name: ComponentName) {
                 Logger.d("onServiceDisconnected")
                 instance = null
-                exitProcess(0)
+//                exitProcess(0)
+                System.exit(0)
             }
         }
 

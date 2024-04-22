@@ -52,7 +52,7 @@ import com.ke.hs.ui.theme.HsTheme
 
 
 @Composable
-fun MainRoute(toSummaryChart: () -> Unit = {}) {
+fun MainRoute(toSummaryChart: () -> Unit = {}, toSettings: () -> Unit = {}) {
     val context = LocalContext.current
 
     val viewModel = hiltViewModel<MainViewModel>()
@@ -69,7 +69,7 @@ fun MainRoute(toSummaryChart: () -> Unit = {}) {
                 101
             )
         }
-    }, toSummaryChart = toSummaryChart)
+    }, toSummaryChart = toSummaryChart, toSettings = toSettings)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +86,7 @@ private fun MainScreen(
             IconButton(onClick = toSummaryChart) {
                 Icon(imageVector = Icons.Default.PieChart, contentDescription = null)
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = toSettings) {
                 Icon(imageVector = Icons.Default.Settings, contentDescription = null)
             }
         })

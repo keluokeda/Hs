@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="module_floating_window_width">180dp</dimen>
+    <dimen name="module_floating_window_width">224dp</dimen>
     <dimen name="module_floating_window_height">300dp</dimen>
     <dimen name="module_floating_window_header_height">56dp</dimen>
 </resources>

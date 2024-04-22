@@ -11,5 +11,9 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Logger.addLogAdapter(AndroidLogAdapter())
+
+        Logger.d("MainApplication onCreate")
+
+//        FileService.bindService(this)
     }
 }

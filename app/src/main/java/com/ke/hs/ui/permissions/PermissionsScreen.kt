@@ -2,10 +2,13 @@ package com.ke.hs.ui.permissions
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Environment
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -26,7 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ke.hs.FileService
 import kotlinx.coroutines.launch
@@ -91,7 +94,15 @@ private fun PermissionsScreen(next: suspend () -> Unit = {}) {
                 installed = isShizukuInstalled(context)
                 if (!installed) {
                     AlertDialog.Builder(context)
-                        .setTitle("请先安装Shizuku")
+                        .setTitle("提示")
+                        .setMessage("请先安装Shizuku")
+                        .setNeutralButton("打开浏览器下载") { _, _ ->
+                            //打开浏览器下载
+                            val url = "https://shizuku.rikka.app/zh-hans/"
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+
+                        }
+
                         .setPositiveButton("确定") { dialog, _ ->
                             dialog.dismiss()
                         }
@@ -160,7 +171,10 @@ private fun PermissionsScreen(next: suspend () -> Unit = {}) {
                     }
                 },
                 enabled = installed && canUse && auth && serviceStarted,
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Text("下一步")
             }

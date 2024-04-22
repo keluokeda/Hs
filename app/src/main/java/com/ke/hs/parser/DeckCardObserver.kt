@@ -123,9 +123,9 @@ class DeckCardObserverImpl @Inject constructor(
 
 
         val listFiles =
-            FileService.getInstance()!!.getFiles(
+            FileService.getInstance()?.getFiles(
                 logsDir
-            )
+            ) ?: return null
 
 
         val logDir = listFiles.filter {
