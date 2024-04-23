@@ -40,6 +40,11 @@ enum class CardType {
     Weapon,
 
 
+    /**
+     * 地标
+     */
+    Location,
+
     None
 }
 
