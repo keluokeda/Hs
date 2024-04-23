@@ -283,9 +283,7 @@ private fun FloatingComposeView(
                             Color.Black.copy(alpha = 0.5f)
                         )
                 ) {
-                    items(cardList, {
-                        it.card.id
-                    }) { card ->
+                    items(cardList) { card ->
                         CardView(card)
                     }
                 }

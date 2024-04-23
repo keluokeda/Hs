@@ -32,8 +32,9 @@ fun SyncRoute(onBack: (() -> Unit)? = null, next: () -> Unit) {
 
     SyncScreen(loading = loading, onBack = onBack) {
         scope.launch {
-            viewModel.sync()
-            next()
+            if (viewModel.sync()) {
+                next()
+            }
         }
     }
 }
