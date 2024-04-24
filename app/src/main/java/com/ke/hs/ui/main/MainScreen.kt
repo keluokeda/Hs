@@ -40,7 +40,11 @@ import com.ke.hs.ui.main.records.RecordsRoute
 
 
 @Composable
-fun MainRoute(toSummaryChart: () -> Unit = {}, toSettings: () -> Unit = {}) {
+fun MainRoute(
+    toSummaryChart: () -> Unit = {},
+    toSettings: () -> Unit = {},
+    toDeckDetail: (String, String) -> Unit
+) {
     val context = LocalContext.current
 
     val viewModel = hiltViewModel<MainViewModel>()
@@ -63,6 +67,7 @@ fun MainRoute(toSummaryChart: () -> Unit = {}, toSettings: () -> Unit = {}) {
         },
         toSummaryChart = toSummaryChart,
         toSettings = toSettings,
+        toDeckDetail = toDeckDetail,
         records = records,
         deckSummaryList = deckSummaryList
     )
@@ -74,6 +79,7 @@ private fun MainScreen(
     start: () -> Unit = {},
     toSettings: () -> Unit = {},
     toSummaryChart: () -> Unit = {},
+    toDeckDetail: (String, String) -> Unit,
     records: List<Game>,
     deckSummaryList: List<DeckSummary>
 ) {
@@ -133,7 +139,7 @@ private fun MainScreen(
             }
             composable(MainScreen.Decks.route) {
 //                RecordsRoute()
-                DecksRoute(deckSummaryList)
+                DecksRoute(deckSummaryList, toDeckDetail = toDeckDetail)
             }
         }
     }

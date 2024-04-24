@@ -2,8 +2,10 @@ package com.ke.hs.parser
 
 import android.content.Context
 import android.os.Environment
+import android.os.FileUtils
 import com.ke.hs.FileService
 import com.ke.hs.db.GameDao
+import com.ke.hs.db.entity.Game
 import com.ke.hs.domain.GetAllCardUseCase
 import com.ke.hs.domain.ParseDeckCodeUseCase
 import com.ke.hs.entity.Card
@@ -11,6 +13,8 @@ import com.ke.hs.entity.CardBean
 import com.ke.hs.entity.CardType
 import com.ke.hs.entity.CurrentDeck
 import com.ke.hs.entity.GameEvent
+import com.ke.hs.logsEnable
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -94,6 +98,8 @@ class DeckCardObserverImpl @Inject constructor(
         get() = _opponentGraveyardCardList
 
 
+    var saveLogFile = false
+
     private fun readLocalFileText(fileName: String): String? {
         return try {
             val logDir = findLogDir()
@@ -170,6 +176,12 @@ class DeckCardObserverImpl @Inject constructor(
             allCards = getAllCardUseCase.execute()
         }
 
+        scope.launch {
+            context.logsEnable.collect {
+                saveLogFile = it
+            }
+        }
+
         val deckFileObserver = DeckFileObserver(interval) {
             readLocalFileText("Decks.log")
         }
@@ -209,7 +221,14 @@ class DeckCardObserverImpl @Inject constructor(
                         _userGraveyardCardList.value = emptyList()
                         _opponentGraveyardCardList.value = emptyList()
 
-                        clearPowerLogFile()
+
+                        if (saveLogFile) {
+                            saveLogFileToLocal(it.game)
+                        } else {
+                            clearPowerLogFile()
+                        }
+
+
 
                         deckLeftCardList = currentDeckList.toList()
                         _deckCardList.value = deckLeftCardList.toList()
@@ -307,24 +326,65 @@ class DeckCardObserverImpl @Inject constructor(
     }
 
     /**
+     * 保存日志文件到本地目录
+     */
+    private fun saveLogFileToLocal(game: Game) {
+
+//        clearLocalLogFile()
+        val logDir = findLogDir()
+
+        if (logDir == null) {
+            Logger.d("找不到最新的log目录")
+            return
+        }
+
+        val localLogDir = File(context.getExternalFilesDir(null), "logs")
+        if (!localLogDir.exists()) {
+            localLogDir.mkdir()
+        }
+
+        val date = Date(game.startTime)
+
+
+        val target = File(localLogDir, simpleDateFormat1.format(date) + ".log")
+//        target.createNewFile()
+
+//        logFile.copyTo(target, overwrite = true)
+
+        File(context.getExternalFilesDir(null), "Power.log").copyTo(
+            target
+        )
+        clearLocalLogFile()
+
+        clearHsLogFile(logDir)
+//        val result =
+//            FileService.getInstance()?.copyAndClearFile(File(logDir, "Power.log").path, target.path)
+//        Logger.d("复制并删除log文件结果 $result")
+    }
+
+    /**
      * 清空log文件
      */
     private fun clearPowerLogFile() {
 
         val logDir = findLogDir() ?: return
+        clearHsLogFile(logDir)
+
+        clearLocalLogFile()
 
 
+    }
 
-        FileService.getInstance()!!.clearFile(File(logDir, "Power.log").path).apply {
-            "删除文件 $logDir 结果 $this".log()
-        }
-
+    private fun clearLocalLogFile() {
         val localFile = File(context.getExternalFilesDir(null), "Power.log")
         if (localFile.exists()) {
-            localFile.delete()
+            val result = localFile.delete()
+            Logger.d("删除本地log文件结果 $result")
         }
+    }
 
-
+    private fun clearHsLogFile(logDir: String) {
+        FileService.getInstance()!!.clearFile(File(logDir, "Power.log").path)
     }
 
     override fun analytics(): String {
@@ -402,3 +462,5 @@ class DeckCardObserverImpl @Inject constructor(
 }
 
 private val simpleDateFormat = SimpleDateFormat("HH:mm:ss")
+
+private val simpleDateFormat1 = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")

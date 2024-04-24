@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,13 +20,13 @@ import com.ke.hs.ui.theme.HsTheme
 
 
 @Composable
-fun SettingsRoute(onBack: () -> Unit = {}, toSync: () -> Unit = {}) {
-    SettingsScreen(onBack, toSync)
+fun SettingsRoute(onBack: () -> Unit = {}, toSync: () -> Unit = {}, toLogs: () -> Unit = {}) {
+    SettingsScreen(onBack, toSync, toLogs)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SettingsScreen(onBack: () -> Unit = {}, toSync: () -> Unit = {}) {
+private fun SettingsScreen(onBack: () -> Unit = {}, toSync: () -> Unit = {}, toLogs: () -> Unit = {}) {
     val context = LocalContext.current
 
     Scaffold(topBar = {
@@ -50,6 +49,14 @@ private fun SettingsScreen(onBack: () -> Unit = {}, toSync: () -> Unit = {}) {
                 ListItem(headlineContent = { Text(text = "联系作者") }, supportingContent = {
                     Text(text = "QQ 913918146")
                 })
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { Text(text = "日志管理") },
+                    modifier = Modifier.clickable {
+                        toLogs()
+                    })
             }
 
             item {

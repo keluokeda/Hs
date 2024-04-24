@@ -8,10 +8,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ke.hs.ui.chart.SummaryChartRoute
 import com.ke.hs.ui.config.ConfigRoute
+import com.ke.hs.ui.deck_detail.DeckDetailRoute
+import com.ke.hs.ui.logs.LogsRoute
 import com.ke.hs.ui.main.MainRoute
 import com.ke.hs.ui.permissions.PermissionsRoute
 import com.ke.hs.ui.settings.SettingsRoute
 import com.ke.hs.ui.sync.SyncRoute
+import com.tencent.bugly.crashreport.CrashReport
 
 @Composable
 internal fun NavigationTree(controller: NavHostController) {
@@ -78,6 +81,8 @@ internal fun NavigationTree(controller: NavHostController) {
                 controller.navigate("/chart/summary")
             }, toSettings = {
                 controller.navigate("/settings")
+            }, toDeckDetail = { name, code ->
+                controller.navigate("/deck/detail?name=$name&code=$code")
             })
         }
 
@@ -93,7 +98,22 @@ internal fun NavigationTree(controller: NavHostController) {
                 controller.popBackStack()
             }, toSync = {
                 controller.navigate("/sync?canBack=true")
+            }, toLogs = {
+                controller.navigate("/logs")
             })
+        }
+
+        composable("/deck/detail?name={name}&code={code}") {
+            DeckDetailRoute({
+//                CrashReport.testJavaCrash()
+                controller.popBackStack()
+            })
+        }
+
+        composable("/logs") {
+            LogsRoute {
+                controller.popBackStack()
+            }
         }
     }
 }

@@ -15,8 +15,8 @@ android {
         applicationId = "com.ke.hs"
         minSdk = 26
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.0.9"
+        versionCode = 11
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -58,8 +58,6 @@ android {
     buildFeatures {
         compose = true
         aidl = true
-        viewBinding = true
-
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.12"
@@ -117,4 +115,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("co.yml:ycharts:2.1.0")
 //    implementation("androidx.compose.material:material:1.6.6")
+    implementation ("com.tencent.bugly:crashreport:latest.release")
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
 }

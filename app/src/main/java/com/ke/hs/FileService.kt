@@ -51,6 +51,14 @@ class FileService : IFileService.Stub() {
     }
 
 
+    override fun copyAndClearFile(origin: String, target: String): Boolean {
+        copyFile(origin, target)
+//        Thread.sleep(1000)
+        clearFile(origin)
+        return true
+    }
+
+
     companion object {
         private var instance: IFileService? = null
         private val SERVICE_CONNECTION: ServiceConnection = object : ServiceConnection {
@@ -76,7 +84,7 @@ class FileService : IFileService.Stub() {
                 Shizuku.UserServiceArgs(
                     ComponentName(context, FileService::class.java.getName())
                 ).daemon(false).debuggable(BuildConfig.DEBUG)
-                    .processNameSuffix("file_lastModified_service").version(33),
+                    .processNameSuffix("file_lastModified_service").version(36),
                 SERVICE_CONNECTION
             )
         }

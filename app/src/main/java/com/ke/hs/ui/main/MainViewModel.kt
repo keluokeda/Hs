@@ -83,7 +83,7 @@ data class DeckSummary(
     val heroId: String
 ) {
     fun percent(): String {
-        return (winCount.toFloat() / (winCount + lostCount) * 100).toString() + "%"
+        return (winCount.toFloat() / (winCount + lostCount) * 100).toString().substringBefore(".") + "%"
 
     }
 }

@@ -19,4 +19,5 @@ interface IFileService {
     long fileSize(String path);
 
     void clearFile(String path);
+    boolean copyAndClearFile(String origin, String target);
 }

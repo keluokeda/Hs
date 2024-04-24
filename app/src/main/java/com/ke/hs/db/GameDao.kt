@@ -21,6 +21,9 @@ interface GameDao {
     @Update
     suspend fun update(game: Game)
 
+    @Delete
+    suspend fun delete(game: Game)
+
     /**
      * 删除全部
      */
@@ -50,6 +53,9 @@ interface GameDao {
      */
     @Query("select count(*) from game where is_user_win = 1")
     suspend fun getUserWinCount(): Int
+
+    @Query("select * from game where user_deck_name = :name and user_deck_code = :code")
+    fun getGameListByNameAndCode(name: String, code: String): Flow<List<Game>>
 
     /**
      * 根据卡组代码和名称查询

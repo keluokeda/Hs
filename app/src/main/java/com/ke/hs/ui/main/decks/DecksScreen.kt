@@ -1,6 +1,7 @@
 package com.ke.hs.ui.main.decks
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,31 +32,34 @@ import com.ke.hs.ui.theme.HsTheme
 
 
 @Composable
-fun DecksRoute(list: List<DeckSummary>) {
+fun DecksRoute(list: List<DeckSummary>, toDeckDetail: (String, String) -> Unit) {
 //    val viewModel = hiltViewModel<MainViewModel>()
 //    val list by viewModel.deckSummaryList.collectAsState()
 
-    DecksScreen(list = list)
+    DecksScreen(list = list, toDeckDetail = toDeckDetail)
 }
 
 @Composable
-private fun DecksScreen(list: List<DeckSummary>) {
+private fun DecksScreen(list: List<DeckSummary>, toDeckDetail: (String, String) -> Unit) {
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(list) {
 
-            DeckSummaryView(it)
+            DeckSummaryView(it, toDeckDetail)
 
         }
     }
 }
 
 @Composable
-private fun DeckSummaryView(it: DeckSummary) {
+private fun DeckSummaryView(it: DeckSummary, toDeckDetail: (String, String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
+            .clickable {
+                toDeckDetail(it.name, it.code)
+            }
     ) {
         AsyncImage(
             model = it.heroId.tileImage,
@@ -68,9 +72,7 @@ private fun DeckSummaryView(it: DeckSummary) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black.copy(alpha = 0.3f))
-                .padding(horizontal = 16.dp)
-
-            ,
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -91,6 +93,8 @@ private fun DeckSummaryView(it: DeckSummary) {
 @PreviewLightDark
 private fun DeckSummaryViewPreview() {
     HsTheme {
-        DeckSummaryView(it = DeckSummary("汉库克", "", 10, 10, "HERO_11b"))
+        DeckSummaryView(
+            it = DeckSummary("汉库克", "", 10, 10, "HERO_11b"),
+            toDeckDetail = { _, _ -> })
     }
 }
