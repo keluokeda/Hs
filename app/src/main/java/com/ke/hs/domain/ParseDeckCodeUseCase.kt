@@ -5,13 +5,14 @@ import android.util.Base64
 import com.ke.hs.db.CardDao
 import com.ke.hs.entity.Card
 import com.ke.hs.entity.CardBean
+import com.orhanobut.logger.Logger
 import javax.inject.Inject
 
 class ParseDeckCodeUseCase
 @Inject constructor(
     private val cardDao: CardDao,
 ) {
-    suspend fun execute(parameters: String): List<CardBean> {
+    suspend fun execute(parameters: String): Pair<List<CardBean>,CardBean> {
         val allCards = cardDao.getAll()
 
         val byteArray =
@@ -60,13 +61,15 @@ class ParseDeckCodeUseCase
         }
 
         //移除英雄
-        cardList.removeFirst()
+        val hero = cardList.removeFirst()
+
+        Logger.d("hero = $hero")
 
         cardList.sortBy {
             it.card.cost
         }
 
-        return cardList
+        return cardList to hero
     }
 
     /**

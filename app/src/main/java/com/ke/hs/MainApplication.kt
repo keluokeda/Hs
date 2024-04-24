@@ -17,3 +17,6 @@ class MainApplication : Application() {
 //        FileService.bindService(this)
     }
 }
+
+val String.tileImage
+    get() = "https://art.hearthstonejson.com/v1/tiles/${this}.png"

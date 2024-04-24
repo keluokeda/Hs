@@ -186,7 +186,7 @@ class DeckCardObserverImpl @Inject constructor(
                 .flowOn(Dispatchers.IO)
                 .map {
                     currentUserDeck = it
-                    parseDeckCodeUseCase.execute(it.code)
+                    parseDeckCodeUseCase.execute(it.code).first
                 }.collect {
                     currentDeckList = it
                     _deckCardList.value = it.toList()

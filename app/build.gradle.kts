@@ -116,5 +116,5 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("co.yml:ycharts:2.1.0")
-
+//    implementation("androidx.compose.material:material:1.6.6")
 }

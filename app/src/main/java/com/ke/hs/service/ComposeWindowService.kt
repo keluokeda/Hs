@@ -63,6 +63,7 @@ import coil.compose.AsyncImage
 import com.ke.hs.R
 import com.ke.hs.entity.CardBean
 import com.ke.hs.parser.DeckCardObserver
+import com.ke.hs.ui.CardView
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -295,88 +296,4 @@ private fun FloatingComposeView(
 
 enum class CardListType {
     DECK, MY_GRAVEYARD, OPPONENT_GRAVEYARD
-}
-
-@Preview(widthDp = 200)
-@Composable
-private fun CardViewPreview() {
-    CardView(
-        card = CardBean(
-            com.ke.hs.entity.Card(name = "麻风侏儒", dbfId = 1, id = ""),
-            count = 2
-        )
-    )
-}
-
-@Composable
-private fun CardView(card: CardBean) {
-    Column {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.height(24.dp)) {
-            Text(
-                text = card.card.cost.toString(),
-                style = TextStyle(color = Color.White, textAlign = TextAlign.Center),
-
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f)
-                    .background(Color.DarkGray)
-                    .wrapContentHeight()
-            )
-
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            ) {
-
-
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    model = "https://art.hearthstonejson.com/v1/tiles/${card.card.id}.png",
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    onError = {
-                        Logger.d("$it")
-                    }
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.6f))
-                ) {
-                    Text(
-                        text = card.card.name, style = TextStyle(
-                            color = Color.White
-                        ), modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 4.dp)
-                    )
-
-                    Text(
-                        text = card.count.toString(),
-                        style = TextStyle(color = Color.White, textAlign = TextAlign.Center),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .aspectRatio(1f)
-                            .background(
-                                colorResource(
-                                    id = card.card.rarity?.colorRes ?: R.color.module_mage
-                                )
-                            )
-                            .wrapContentHeight()
-                    )
-                }
-
-            }
-
-
-        }
-
-        HorizontalDivider(
-            color = Color.Gray,
-            thickness = 1.dp
-        )
-    }
 }

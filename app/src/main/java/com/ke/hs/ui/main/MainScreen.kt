@@ -4,51 +4,39 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ke.hs.R
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.ke.hs.db.entity.Game
-import com.ke.hs.entity.CardClass
 import com.ke.hs.service.ComposeWindowService
-import com.ke.hs.ui.theme.HsTheme
+import com.ke.hs.ui.main.decks.DecksRoute
+import com.ke.hs.ui.main.records.RecordsRoute
 
 
 @Composable
@@ -56,30 +44,41 @@ fun MainRoute(toSummaryChart: () -> Unit = {}, toSettings: () -> Unit = {}) {
     val context = LocalContext.current
 
     val viewModel = hiltViewModel<MainViewModel>()
-    val gameList by viewModel.gameList.collectAsState()
-    MainScreen(gameList = gameList, start = {
-        if (Settings.canDrawOverlays(context)) {
-            context.startService(Intent(context, ComposeWindowService::class.java))
-        } else {
-            (context as Activity).startActivityForResult(
-                Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:${context.packageName}")
-                ),
-                101
-            )
-        }
-    }, toSummaryChart = toSummaryChart, toSettings = toSettings)
+
+    val records by viewModel.records.collectAsState()
+    val deckSummaryList by viewModel.deckSummaryList.collectAsState()
+    MainScreen(
+        start = {
+            if (Settings.canDrawOverlays(context)) {
+                context.startService(Intent(context, ComposeWindowService::class.java))
+            } else {
+                (context as Activity).startActivityForResult(
+                    Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:${context.packageName}")
+                    ),
+                    101
+                )
+            }
+        },
+        toSummaryChart = toSummaryChart,
+        toSettings = toSettings,
+        records = records,
+        deckSummaryList = deckSummaryList
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainScreen(
-    gameList: List<Game> = emptyList(),
     start: () -> Unit = {},
     toSettings: () -> Unit = {},
-    toSummaryChart: () -> Unit = {}
+    toSummaryChart: () -> Unit = {},
+    records: List<Game>,
+    deckSummaryList: List<DeckSummary>
 ) {
+    val navController = rememberNavController()
+
 
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = "首页") }, actions = {
@@ -94,132 +93,54 @@ private fun MainScreen(
         FloatingActionButton(onClick = start) {
             Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
         }
+    }, bottomBar = {
+        NavigationBar {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+            MainScreen.entries.forEach { item ->
+                NavigationBarItem(
+                    icon = { Icon(item.imageVector, contentDescription = null) },
+                    label = { Text(item.label) },
+                    selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                    onClick = {
+                        navController.navigate(item.route) {
+                            // Pop up to the start destination of the graph to
+                            // avoid building up a large stack of destinations
+                            // on the back stack as users select items
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
+                            launchSingleTop = true
+                            // Restore state when reselecting a previously selected item
+                            restoreState = true
+                        }
+                    }
+                )
+            }
+        }
     }) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
+        NavHost(
+            navController,
+            startDestination = MainScreen.Records.route,
+            Modifier.padding(padding)
         ) {
 
-            items(gameList, {
-                it.id
-            }) {
-                GameView(game = it)
+
+            composable(MainScreen.Records.route) {
+                RecordsRoute(records)
+            }
+            composable(MainScreen.Decks.route) {
+//                RecordsRoute()
+                DecksRoute(deckSummaryList)
             }
         }
     }
 }
 
-@Composable
-private fun GameView(game: Game) {
+private enum class MainScreen(val imageVector: ImageVector, val label: String, val route: String) {
 
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    (if (game.isUserWin == true) Color.Green else Color.Red)
-                )
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-
-        ) {
-
-            Image(
-                painter = painterResource(id = game.userHero?.roundIcon ?: R.drawable.neutral),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
-            Text(
-                text = "VS",
-                style = TextStyle(
-                    color = Color.Yellow,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-
-            Image(
-                painter = painterResource(id = game.opponentHero?.roundIcon ?: R.drawable.neutral),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = game.opponentName,
-                style = TextStyle(color = Color.White),
-                modifier = Modifier.weight(1f)
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            val duration = (game.endTime - game.startTime) / 1000
-
-
-            Text(text = "${duration / 60}:${duration % 60}")
-        }
-
-        HorizontalDivider()
-    }
-
-
-}
-
-@PreviewLightDark
-@Composable
-@Preview
-private fun GameViewWinPreview() {
-    HsTheme {
-        GameView(
-            game = Game(
-                isUserWin = true,
-                userHero = CardClass.Druid,
-                opponentHero = CardClass.Hunter,
-                opponentName = "汉库克"
-            )
-        )
-    }
-}
-
-@Composable
-@Preview
-private fun GameViewLostPreview() {
-    HsTheme {
-        GameView(
-            game = Game(
-                isUserWin = false,
-                userHero = CardClass.Druid,
-                opponentHero = CardClass.Hunter,
-                opponentName = "汉库克"
-            )
-        )
-    }
-}
-
-@PreviewLightDark
-@Composable
-@Preview(showBackground = true)
-private fun MainScreenPreview() {
-    HsTheme {
-        MainScreen(
-            gameList = listOf(
-                Game(
-                    isUserWin = false,
-                    userHero = CardClass.Druid,
-                    opponentHero = CardClass.Hunter,
-                    opponentName = "汉库克"
-                ),
-                Game(
-                    isUserWin = true,
-                    userHero = CardClass.Druid,
-                    opponentHero = CardClass.Hunter,
-                    opponentName = "汉库克"
-                )
-            )
-        )
-    }
+    Records(Icons.Default.Home, "记录", "/main/records"),
+    Decks(Icons.AutoMirrored.Filled.List, "卡组", "/main/decks")
 }
