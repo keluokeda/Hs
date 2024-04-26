@@ -4,11 +4,11 @@
 
     <queries>
         <package android:name="moe.shizuku.privileged.api" />
+        <package android:name="com.blizzard.wtcg.hearthstone" />
     </queries>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -37,10 +37,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".service.WindowService"
-            android:enabled="true"
-            android:exported="false" />
 
         <service
             android:name=".service.ComposeWindowService"
@@ -57,6 +53,17 @@
         <meta-data
             android:name="moe.shizuku.client.V3_SUPPORT"
             android:value="true" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.share"
+            android:enabled="true"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/share_file_paths" />
+        </provider>
 
     </application>
 

@@ -26,6 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.SendAndArchive
 import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
@@ -212,25 +213,25 @@ private fun FloatingComposeView(
                     ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(onClick = exitApp) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ExitToApp,
-                        contentDescription = null,
-                        tint = Color.Red
-                    )
-                }
+//                IconButton(onClick = exitApp) {
+//                    Icon(
+//                        imageVector = Icons.AutoMirrored.Default.ExitToApp,
+//                        contentDescription = null,
+//                        tint = Color.Red
+//                    )
+//                }
 
-                IconButton(onClick = {
-                    analyticsText = deckCardObserver.analytics()
-                    showAnalytics = !showAnalytics
-
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Analytics,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
-                }
+//                IconButton(onClick = {
+//                    analyticsText = deckCardObserver.analytics()
+//                    showAnalytics = !showAnalytics
+//
+//                }) {
+//                    Icon(
+//                        imageVector = Icons.Default.Analytics,
+//                        contentDescription = null,
+//                        tint = Color.White
+//                    )
+//                }
 
                 IconButton(onClick = {
                     toggle()
@@ -266,6 +267,34 @@ private fun FloatingComposeView(
                             cardListType = CardListType.OPPONENT_GRAVEYARD
                             expanded = false
                         })
+
+                    }
+                }
+
+                Box {
+                    var expanded by remember {
+                        mutableStateOf(false)
+                    }
+                    IconButton(onClick = { expanded = true }) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                        DropdownMenuItem(text = { Text(text = "退出") }, onClick = {
+                            exitApp()
+                            expanded = false
+                        })
+
+                        DropdownMenuItem(
+                            text = { Text(text = if (showAnalytics) "隐藏诊断" else "显示诊断") },
+                            onClick = {
+                                analyticsText = deckCardObserver.analytics()
+                                showAnalytics = !showAnalytics
+                                expanded = false
+                            })
 
                     }
                 }

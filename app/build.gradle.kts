@@ -15,8 +15,8 @@ android {
         applicationId = "com.ke.hs"
         minSdk = 26
         targetSdk = 34
-        versionCode = 11
-        versionName = "1.1.1"
+        versionCode = 15
+        versionName = "1.1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -117,4 +117,7 @@ dependencies {
 //    implementation("androidx.compose.material:material:1.6.6")
     implementation ("com.tencent.bugly:crashreport:latest.release")
     implementation("androidx.datastore:datastore-preferences:1.1.0")
+//    implementation("com.tencent.shiply:upgrade:2.0.0-RC01")
+    implementation("com.tencent.shiply:upgrade:2.1.5-RC01")
+    implementation("com.tencent.shiply:upgrade-ui:2.1.5-RC01") // 弹框ui相关，业务方如果自己自定义弹框，可以不依赖
 }

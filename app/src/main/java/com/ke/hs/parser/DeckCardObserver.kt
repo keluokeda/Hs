@@ -3,6 +3,7 @@ package com.ke.hs.parser
 import android.content.Context
 import android.os.Environment
 import android.os.FileUtils
+import android.util.Log
 import com.ke.hs.FileService
 import com.ke.hs.db.GameDao
 import com.ke.hs.db.entity.Game
@@ -351,9 +352,10 @@ class DeckCardObserverImpl @Inject constructor(
 
 //        logFile.copyTo(target, overwrite = true)
 
-        File(context.getExternalFilesDir(null), "Power.log").copyTo(
-            target
-        )
+         File(context.getExternalFilesDir(null), "Power.log")
+             .copyTo(target)
+//        Log.d("log",text)
+//        target.writeText(text)
         clearLocalLogFile()
 
         clearHsLogFile(logDir)

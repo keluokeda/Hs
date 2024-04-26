@@ -1,5 +1,6 @@
 package com.ke.hs.ui.settings
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.ke.hs.ui.theme.HsTheme
+import com.orhanobut.logger.BuildConfig
+import com.orhanobut.logger.Logger
+import com.tencent.upgrade.core.DefaultUpgradeStrategyRequestCallback
+import com.tencent.upgrade.core.UpgradeManager
 
 
 @Composable
@@ -26,7 +31,11 @@ fun SettingsRoute(onBack: () -> Unit = {}, toSync: () -> Unit = {}, toLogs: () -
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SettingsScreen(onBack: () -> Unit = {}, toSync: () -> Unit = {}, toLogs: () -> Unit = {}) {
+private fun SettingsScreen(
+    onBack: () -> Unit = {},
+    toSync: () -> Unit = {},
+    toLogs: () -> Unit = {}
+) {
     val context = LocalContext.current
 
     Scaffold(topBar = {
@@ -84,6 +93,30 @@ private fun SettingsScreen(onBack: () -> Unit = {}, toSync: () -> Unit = {}, toL
                                 android.net.Uri.parse(url)
                             )
                         )
+                    })
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text(text = "检查更新") },
+                    trailingContent = {
+                        Text(text = com.ke.hs.BuildConfig.VERSION_NAME)
+                    },
+                    modifier = Modifier.clickable {
+                        UpgradeManager.getInstance()
+                            .checkUpgrade(
+                                false,
+                                null,
+                                object : DefaultUpgradeStrategyRequestCallback() {
+                                    override fun onReceivedNoStrategy() {
+                                        super.onReceivedNoStrategy()
+//                                    Logger.d("onReceivedNoStrategy")
+                                        Toast.makeText(
+                                            context.applicationContext,
+                                            "已是最新版本",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                })
                     })
             }
         }

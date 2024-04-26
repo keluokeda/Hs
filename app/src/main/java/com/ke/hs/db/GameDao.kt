@@ -54,7 +54,7 @@ interface GameDao {
     @Query("select count(*) from game where is_user_win = 1")
     suspend fun getUserWinCount(): Int
 
-    @Query("select * from game where user_deck_name = :name and user_deck_code = :code")
+    @Query("select * from game where user_deck_name = :name and user_deck_code = :code order by end_time desc")
     fun getGameListByNameAndCode(name: String, code: String): Flow<List<Game>>
 
     /**
