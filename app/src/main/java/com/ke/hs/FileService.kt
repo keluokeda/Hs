@@ -4,12 +4,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
-import com.orhanobut.logger.BuildConfig
 import com.orhanobut.logger.Logger
 import rikka.shizuku.Shizuku
 import java.io.File
 import java.io.IOException
-import kotlin.system.exitProcess
 
 class FileService : IFileService.Stub() {
     override fun getFiles(path: String): MutableList<String> {
@@ -73,6 +71,14 @@ class FileService : IFileService.Stub() {
 //                exitProcess(0)
                 System.exit(0)
             }
+
+            override fun onNullBinding(name: ComponentName) {
+                Logger.d("onNullBinding")
+            }
+
+            override fun onBindingDied(name: ComponentName) {
+                Logger.d("onBindingDied")
+            }
         }
 
         fun getInstance(): IFileService? {
@@ -83,7 +89,7 @@ class FileService : IFileService.Stub() {
             Shizuku.bindUserService(
                 Shizuku.UserServiceArgs(
                     ComponentName(context, FileService::class.java.getName())
-                ).daemon(false).debuggable(BuildConfig.DEBUG)
+                ).daemon(false).debuggable(false)
                     .processNameSuffix("file_lastModified_service").version(36),
                 SERVICE_CONNECTION
             )

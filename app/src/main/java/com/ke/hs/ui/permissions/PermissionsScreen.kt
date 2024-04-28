@@ -136,13 +136,16 @@ private fun PermissionsScreen(next: suspend () -> Unit = {}) {
                     contentDescription = null
                 )
             }, modifier = Modifier.clickable {
-                auth =
-                    hasPermission()
-                if (!auth) {
-                    try {
-                        Shizuku.requestPermission(100)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+
+                if(canUse) {
+                    auth =
+                        hasPermission()
+                    if (!auth) {
+                        try {
+                            Shizuku.requestPermission(100)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             })
@@ -155,10 +158,12 @@ private fun PermissionsScreen(next: suspend () -> Unit = {}) {
                     contentDescription = null
                 )
             }, modifier = Modifier.clickable {
-                serviceStarted =
-                    FileService.getInstance() != null
-                if (!serviceStarted) {
-                    FileService.bindService(context)
+                if (canUse && auth) {
+                    serviceStarted =
+                        FileService.getInstance() != null
+                    if (!serviceStarted) {
+                        FileService.bindService(context)
+                    }
                 }
             })
 

@@ -10,13 +10,13 @@ import com.ke.hs.lib.card.mechanics.Elusive
 /**
  * 精灵龙
  */
-class FaerieDragon : MinionCard(), Elusive {
+class FaerieDragon :
+    MinionCard(), Elusive {
 
     override val id: String
         get() = "NEW1_023"
     override val cardClass: CardClass
         get() = CardClass.Neutral
-
 
 
     override val set = CardSet.Core

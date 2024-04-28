@@ -5,7 +5,7 @@ import com.ke.hs.lib.card.mechanics.Mechanics
 /**
  * 可以使用的卡牌
  */
-abstract class UsableCard : AbsCard() {
+abstract class UsableCard  : AbsCard() {
 
     /**
      * 能被打出去的卡牌必须有费用

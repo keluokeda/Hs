@@ -6,6 +6,8 @@ interface ICard {
      */
     val name: String
 
+
+
     /**
      * 描述
      */
