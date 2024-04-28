@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -42,7 +43,7 @@ class MainApplication : Application() {
 // At the top level of your kotlin file:
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-val LogsEnable = booleanPreferencesKey("logs_enable")
+private val LogsEnable = booleanPreferencesKey("logs_enable")
 
 /**
  * 日志保存功能是否开启
@@ -57,6 +58,20 @@ val Context.logsEnable: Flow<Boolean>
 suspend fun Context.setLogsEnable(enable: Boolean) {
     dataStore.edit { settings ->
         settings[LogsEnable] = enable
+    }
+}
+
+private val lastWindowWidthKey = intPreferencesKey("last_window_width")
+
+val Context.lastWindowWidth: Flow<Int?>
+    get() = this.dataStore.data.map {
+        it[lastWindowWidthKey]
+    }
+
+suspend fun Context.setWindowWidth(width: Int) {
+    dataStore.edit {
+//        it[lastWindowWidthKey] = width
+        it[lastWindowWidthKey] = width
     }
 }
 

@@ -17,5 +17,10 @@ enum class Mechanics {
     /**
      * 亡语
      */
-    Deathrattle
+    Deathrattle,
+
+    /**
+     * 光环
+     */
+    Aura
 }

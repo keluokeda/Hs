@@ -17,11 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.ke.hs.R
+import com.ke.hs.setWindowWidth
 import com.ke.hs.ui.theme.HsTheme
-import com.orhanobut.logger.BuildConfig
-import com.orhanobut.logger.Logger
 import com.tencent.upgrade.core.DefaultUpgradeStrategyRequestCallback
 import com.tencent.upgrade.core.UpgradeManager
+import kotlinx.coroutines.runBlocking
 
 
 @Composable
@@ -117,6 +118,17 @@ private fun SettingsScreen(
                                         ).show()
                                     }
                                 })
+                    })
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { Text(text = "重置悬浮窗默认宽度") },
+                    modifier = Modifier.clickable {
+                        runBlocking {
+                            context.setWindowWidth(context.resources.getDimensionPixelSize(R.dimen.module_floating_window_width))
+
+                        }
                     })
             }
         }

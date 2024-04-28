@@ -7,12 +7,12 @@ sealed interface InsertStackResult {
     /**
      * 插入成功
      */
-    object Success : InsertStackResult
+    data object Success : InsertStackResult
 
     /**
      * 不能插入，例如不在Block内的TAG_CHANGE
      */
-    object CanNotInsert : InsertStackResult
+    data object CanNotInsert : InsertStackResult
 
     /**
      * 结束了

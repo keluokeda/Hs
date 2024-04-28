@@ -1,6 +1,6 @@
 package com.ke.hs.lib.card
 
-abstract class MinionCard : AbsCard() {
+abstract class MinionCard : UsableCard() {
     /**
      * 攻击力
      */

@@ -7,7 +7,8 @@ import android.view.WindowManager
 class ScaleTouchListener constructor(
     private val windowManager: WindowManager,
     private val rootView: View,
-    private val layoutParams: WindowManager.LayoutParams
+    private val layoutParams: WindowManager.LayoutParams,
+    private val onUpdated: (Int) -> Unit
 ) : View.OnTouchListener {
     private var x = 0
     private var y = 0
@@ -19,6 +20,7 @@ class ScaleTouchListener constructor(
                 y = motionEvent.rawY.toInt()
 
             }
+
             MotionEvent.ACTION_MOVE -> {
                 val nowX = motionEvent.rawX.toInt()
                 val nowY = motionEvent.rawY.toInt()
@@ -36,7 +38,9 @@ class ScaleTouchListener constructor(
                 //更新悬浮球控件位置
 //                windowManager.updateViewLayout(rootView, layoutParams)
                 windowManager.updateViewLayout(rootView, layoutParams)
+                onUpdated(layoutParams.width)
             }
+
             else -> {
 
             }

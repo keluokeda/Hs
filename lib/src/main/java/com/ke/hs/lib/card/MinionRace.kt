@@ -9,5 +9,20 @@ enum class MinionRace {
     /**
      * 元素
      */
-    Elemental
+    Elemental,
+
+    /**
+     * 野兽
+     */
+    Beast,
+
+    /**
+     * 恶魔
+     */
+    Demon,
+
+    /**
+     * 图腾
+     */
+    Totem
 }

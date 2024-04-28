@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.IBinder
 import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.FrameLayout
@@ -63,10 +65,15 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import coil.compose.AsyncImage
 import com.ke.hs.R
 import com.ke.hs.entity.CardBean
+import com.ke.hs.lastWindowWidth
 import com.ke.hs.parser.DeckCardObserver
+import com.ke.hs.setWindowWidth
 import com.ke.hs.ui.CardView
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -90,7 +97,12 @@ class ComposeWindowService : LifecycleService(), SavedStateRegistryOwner {
         val layoutParams = WindowManager.LayoutParams()
         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
 
-        layoutParams.width = resources.getDimension(R.dimen.module_floating_window_width).toInt()
+        layoutParams.width =
+            runBlocking {
+                lastWindowWidth.first()
+                    ?: resources.getDimension(R.dimen.module_floating_window_width).toInt()
+            }
+
         layoutParams.height = resources.getDimension(R.dimen.module_floating_window_height).toInt()
         //需要设置 这个 不然空白地方无法点击
         layoutParams.flags =
@@ -102,13 +114,27 @@ class ComposeWindowService : LifecycleService(), SavedStateRegistryOwner {
         savedStateRegistryController.performRestore(null)
 
 
-        frameLayout = FrameLayout(this)
+        frameLayout = LayoutInflater.from(this).inflate(R.layout.compose_window, null)
+            .findViewById(R.id.frame_layout)
+
+        val bottom1 = frameLayout.findViewById<View>(R.id.bottom1)
+        val bottom2 = frameLayout.findViewById<View>(R.id.bottom2)
         frameLayout.setViewTreeLifecycleOwner(this)
         frameLayout.setViewTreeSavedStateRegistryOwner(this)
         val composeView = ComposeView(this)
-        frameLayout.addView(composeView)
-        frameLayout.setPadding(0, 0, 16, 16)
-        frameLayout.setOnTouchListener(ScaleTouchListener(windowManager, frameLayout, layoutParams))
+        frameLayout.addView(composeView, 0)
+//        frameLayout.setPadding(0, 0, 16, 16)
+        bottom1.setOnTouchListener(ScaleTouchListener(windowManager, frameLayout, layoutParams) {
+            lifecycleScope.launch {
+                this@ComposeWindowService.setWindowWidth(it)
+            }
+        })
+        bottom2.setOnTouchListener(ScaleTouchListener(windowManager, frameLayout, layoutParams) {
+            lifecycleScope.launch {
+                this@ComposeWindowService.setWindowWidth(it)
+            }
+        })
+
         composeView.setViewTreeSavedStateRegistryOwner(this)
         composeView.setViewTreeLifecycleOwner(this)
 
@@ -135,6 +161,14 @@ class ComposeWindowService : LifecycleService(), SavedStateRegistryOwner {
                 frameLayout
             )
         )
+
+//        bottom2.setOnTouchListener(
+//            ItemViewTouchListener(
+//                layoutParams,
+//                windowManager,
+//                frameLayout
+//            )
+//        )
         windowManager.addView(frameLayout, layoutParams)
 
 
@@ -201,6 +235,14 @@ private fun FloatingComposeView(
 
 
         Column(modifier = Modifier.fillMaxSize()) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .padding(vertical = 3.dp, horizontal = 32.dp)
+                    .background(Color.White)
+            )
 
             Row(
                 modifier = Modifier
