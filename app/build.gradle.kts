@@ -4,7 +4,6 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
-    id("androidx.room")
 }
 
 android {
@@ -24,9 +23,7 @@ android {
         }
     }
 
-    room {
-        schemaDirectory("$projectDir/schemas")
-    }
+
 
     signingConfigs {
         create("release") {
@@ -79,6 +76,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(project(":module"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -95,12 +93,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    // To use Kotlin annotation processing tool (kapt)
-    kapt(libs.androidx.room.compiler)
-    // optional - Paging 3 Integration
-    implementation(libs.androidx.room.paging)
+
 
     implementation(libs.androidx.navigation.compose)
 
@@ -120,4 +113,5 @@ dependencies {
 //    implementation("com.tencent.shiply:upgrade:2.0.0-RC01")
     implementation("com.tencent.shiply:upgrade:2.1.5-RC01")
     implementation("com.tencent.shiply:upgrade-ui:2.1.5-RC01") // 弹框ui相关，业务方如果自己自定义弹框，可以不依赖
+
 }

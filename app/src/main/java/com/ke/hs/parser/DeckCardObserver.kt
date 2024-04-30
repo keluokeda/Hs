@@ -2,19 +2,24 @@ package com.ke.hs.parser
 
 import android.content.Context
 import android.os.Environment
-import android.os.FileUtils
-import android.util.Log
 import com.ke.hs.FileService
-import com.ke.hs.db.GameDao
-import com.ke.hs.db.entity.Game
-import com.ke.hs.domain.GetAllCardUseCase
-import com.ke.hs.domain.ParseDeckCodeUseCase
-import com.ke.hs.entity.Card
-import com.ke.hs.entity.CardBean
-import com.ke.hs.entity.CardType
-import com.ke.hs.entity.CurrentDeck
-import com.ke.hs.entity.GameEvent
+
 import com.ke.hs.logsEnable
+import com.ke.hs.module.db.GameDao
+import com.ke.hs.module.db.entity.Game
+import com.ke.hs.module.domain.GetAllCardUseCase
+import com.ke.hs.module.domain.ParseDeckCodeUseCase
+import com.ke.hs.module.entity.Card
+import com.ke.hs.module.entity.CardBean
+import com.ke.hs.module.entity.CardType
+import com.ke.hs.module.entity.CurrentDeck
+import com.ke.hs.module.entity.GameEvent
+import com.ke.hs.module.parser.DeckCardObserver
+import com.ke.hs.module.parser.DeckFileObserver
+import com.ke.hs.module.parser.PowerFileObserver
+import com.ke.hs.module.parser.PowerParser
+import com.ke.hs.module.parser.PowerTagHandler
+import com.ke.hs.module.parser.log
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -33,33 +38,33 @@ import javax.inject.Inject
 /**
  * 剩余卡牌监听器
  */
-interface DeckCardObserver {
-
-    /**
-     * 牌库的卡牌
-     */
-    val deckCardList: StateFlow<List<CardBean>>
-
-    /**
-     * 自己的墓地
-     */
-    val userGraveyardCardList: StateFlow<List<CardBean>>
-
-    /**
-     * 对手的墓地
-     */
-    val opponentGraveyardCardList: StateFlow<List<CardBean>>
-
-    /**
-     * 初始化
-     */
-    fun init(scope: CoroutineScope)
-
-    /**
-     * 分析诊断
-     */
-    fun analytics(): String
-}
+//interface DeckCardObserver {
+//
+//    /**
+//     * 牌库的卡牌
+//     */
+//    val deckCardList: StateFlow<List<CardBean>>
+//
+//    /**
+//     * 自己的墓地
+//     */
+//    val userGraveyardCardList: StateFlow<List<CardBean>>
+//
+//    /**
+//     * 对手的墓地
+//     */
+//    val opponentGraveyardCardList: StateFlow<List<CardBean>>
+//
+//    /**
+//     * 初始化
+//     */
+//    fun init(scope: CoroutineScope)
+//
+//    /**
+//     * 分析诊断
+//     */
+//    fun analytics(): String
+//}
 
 class DeckCardObserverImpl @Inject constructor(
     private val powerParser: PowerParser,
@@ -275,12 +280,17 @@ class DeckCardObserverImpl @Inject constructor(
                     is GameEvent.InsertCardToGraveyard -> {
                         onGraveyardCardsChanged(it.cardId, it.isUser)
                     }
+
+
                 }
             }
         }
 
         powerParser.powerTagListener = {
-            powerTagHandler.handle(it)
+            scope.launch {
+                powerTagHandler.handle(it)
+
+            }
         }
 
 
@@ -352,8 +362,8 @@ class DeckCardObserverImpl @Inject constructor(
 
 //        logFile.copyTo(target, overwrite = true)
 
-         File(context.getExternalFilesDir(null), "Power.log")
-             .copyTo(target)
+        File(context.getExternalFilesDir(null), "Power.log")
+            .copyTo(target)
 //        Log.d("log",text)
 //        target.writeText(text)
         clearLocalLogFile()

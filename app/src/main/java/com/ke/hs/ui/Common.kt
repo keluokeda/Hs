@@ -42,10 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ke.hs.R
-import com.ke.hs.db.entity.Game
-import com.ke.hs.entity.Card
-import com.ke.hs.entity.CardBean
-import com.ke.hs.entity.CardClass
+import com.ke.hs.module.db.entity.Game
+import com.ke.hs.module.entity.Card
+import com.ke.hs.module.entity.CardBean
+import com.ke.hs.module.entity.CardClass
 import com.ke.hs.ui.theme.HsTheme
 import com.orhanobut.logger.Logger
 
@@ -164,7 +164,7 @@ fun GameRecordView(game: Game, onDelete: (Game) -> Unit = {}) {
         ) {
 
             Image(
-                painter = painterResource(id = game.userHero?.roundIcon ?: R.drawable.neutral),
+                painter = painterResource(id = game.userHero?.roundIcon ?: com.ke.hs.module.R.drawable.neutral),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
@@ -179,7 +179,7 @@ fun GameRecordView(game: Game, onDelete: (Game) -> Unit = {}) {
             )
 
             Image(
-                painter = painterResource(id = game.opponentHero?.roundIcon ?: R.drawable.neutral),
+                painter = painterResource(id = game.opponentHero?.roundIcon ?: com.ke.hs.module.R.drawable.neutral),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
 

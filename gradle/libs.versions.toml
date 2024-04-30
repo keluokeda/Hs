@@ -22,6 +22,8 @@ constraintlayout = "2.1.4"
 recyclerview = "1.3.2"
 kemvvm = "1.1.3"
 adapterhelper = "3.0.4"
+appcompat = "1.6.1"
+material = "1.11.0"
 
 
 [libraries]
@@ -58,10 +60,13 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 ke-mvvm = { module = "com.github.keluokeda:mvvm_base", version.ref = "kemvvm" }
 adapter-helper = { module = "com.github.CymChad:BaseRecyclerViewAdapterHelper", version.ref = "adapterhelper" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 androidHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
 

@@ -3,16 +3,13 @@ package com.ke.hs.ui.sync
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.ke.hs.db.CardDao
-import com.ke.hs.domain.GetAllCardUseCase
-import com.ke.hs.domain.GetCardListUseCase
-import com.ke.hs.domain.InsertCardListToDatabaseUseCase
+import com.ke.hs.module.db.CardDao
+import com.ke.hs.module.domain.GetCardListUseCase
+import com.ke.hs.module.domain.InsertCardListToDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

@@ -3,11 +3,12 @@ package com.ke.hs.ui.deck_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ke.hs.db.GameDao
-import com.ke.hs.db.entity.Game
-import com.ke.hs.domain.ParseDeckCodeUseCase
-import com.ke.hs.entity.CardBean
-import com.ke.hs.entity.CardClass
+import com.ke.hs.module.db.GameDao
+import com.ke.hs.module.db.entity.Game
+import com.ke.hs.module.domain.ParseDeckCodeUseCase
+import com.ke.hs.module.entity.CardBean
+import com.ke.hs.module.entity.CardClass
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

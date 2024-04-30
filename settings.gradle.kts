@@ -39,3 +39,5 @@ dependencyResolutionManagement {
 rootProject.name = "Hs"
 include(":app")
 include(":lib")
+include(":module")
+include(":demo")

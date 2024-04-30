@@ -2,15 +2,13 @@ package com.ke.hs.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ke.hs.db.GameDao
-import com.ke.hs.db.entity.Game
-import com.ke.hs.domain.ParseDeckCodeUseCase
+import com.ke.hs.module.db.GameDao
+import com.ke.hs.module.db.entity.Game
+import com.ke.hs.module.domain.ParseDeckCodeUseCase
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

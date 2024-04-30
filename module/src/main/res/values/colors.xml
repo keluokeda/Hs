@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="module_mage">#69CCF0</color>
+    <color name="module_warlock">#9482C9</color>
+    <color name="module_druid">#FF7D0A</color>
+    <color name="module_rogue">#FFF569</color>
+    <color name="module_shaman">#0070DE</color>
+    <color name="module_hunter">#ABD473</color>
+    <color name="module_priest">#FFFFFF</color>
+    <color name="module_warrior">#C79C6E</color>
+    <color name="module_paladin">#F58CBA</color>
+    <color name="module_demon_hunter">#A330C9</color>
+    <color name="module_neutral">#ccc</color>
+    <color name="module_death_knight">#C41F3B</color>
+    <color name="module_divider">#ccc</color>
+
+    <color name="module_rarity_common">#828282</color>
+    <color name="module_rarity_rare">#3d5375</color>
+    <color name="module_rarity_epic">#604b7d</color>
+    <color name="module_rarity_legendary">#845c2e</color>
+    <color name="module_loss">#ff0000</color>
+    <color name="module_win">#00ff00</color>
+    <color name="module_white">#fff</color>
+</resources>

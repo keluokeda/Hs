@@ -33,7 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.ke.hs.db.entity.Game
+import com.ke.hs.module.db.entity.Game
 import com.ke.hs.service.ComposeWindowService
 import com.ke.hs.ui.main.decks.DecksRoute
 import com.ke.hs.ui.main.records.RecordsRoute

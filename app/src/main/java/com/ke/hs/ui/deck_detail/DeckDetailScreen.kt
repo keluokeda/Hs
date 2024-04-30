@@ -38,17 +38,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ke.hs.R
-import com.ke.hs.db.entity.Game
-import com.ke.hs.entity.Card
-import com.ke.hs.entity.CardBean
-import com.ke.hs.entity.CardClass
+import com.ke.hs.module.db.entity.Game
+import com.ke.hs.module.entity.Card
+import com.ke.hs.module.entity.CardBean
+import com.ke.hs.module.entity.CardClass
 import com.ke.hs.renderImage
 import com.ke.hs.ui.CardView
 import com.ke.hs.ui.GameRecordView
@@ -206,7 +205,9 @@ private fun DeckStatisticsView(list: List<Triple<CardClass, Int, Int>>) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = it.first.roundIcon ?: R.drawable.neutral),
+                    painter = painterResource(
+                        id = it.first.roundIcon ?: com.ke.hs.module.R.drawable.neutral
+                    ),
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
                 )

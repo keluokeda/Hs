@@ -1,7 +1,7 @@
 package com.ke.hs.ui.permissions
 
 import androidx.lifecycle.ViewModel
-import com.ke.hs.db.CardDao
+import com.ke.hs.module.db.CardDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
