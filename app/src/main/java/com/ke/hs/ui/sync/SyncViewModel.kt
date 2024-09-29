@@ -33,6 +33,7 @@ class SyncViewModel @Inject constructor(
             _loading.value = false
             true
         } catch (e: Exception) {
+            e.printStackTrace()
             _loading.value = false
             Toast.makeText(context, "同步失败", Toast.LENGTH_SHORT).show()
             false

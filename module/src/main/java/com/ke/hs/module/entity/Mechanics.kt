@@ -406,7 +406,9 @@ enum class Mechanics {
 
     ELUSIVE,
 
-    MINIATURIZE
+    MINIATURIZE,
+
+    GIGANTIFY
 }
 
 
