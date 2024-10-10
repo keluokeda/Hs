@@ -5,6 +5,8 @@
     <queries>
         <package android:name="moe.shizuku.privileged.api" />
         <package android:name="com.blizzard.wtcg.hearthstone" />
+        <package android:name="com.blizzard.wtcg.hearthstone.cn.huawei" />
+        <package android:name="com.blizzard.wtcg.hearthstone.cn.dashen" />
     </queries>
 
     <uses-permission android:name="android.permission.INTERNET" />

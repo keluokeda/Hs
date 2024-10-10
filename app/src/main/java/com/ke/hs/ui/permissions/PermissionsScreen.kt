@@ -17,10 +17,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,16 +34,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ke.hs.FileService
+import com.ke.hs.currentHsPackage
+import com.ke.hs.module.entity.HsPackage
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import rikka.shizuku.Shizuku
 
 
 @Composable
 internal fun PermissionsRoute(next: (String) -> Unit) {
     val viewModel = hiltViewModel<PermissionsViewModel>()
-    PermissionsScreen {
+
+    val currentHsPackage by viewModel.currentHsPackage.collectAsState()
+
+    val context = LocalContext.current
+    PermissionsScreen(currentHsPackage, {
+        viewModel.setCurrentHsPackage(it)
+    }) {
+
+        val hsPackageName = runBlocking {
+            context.currentHsPackage.first().packageName
+        }
+
         val path =
-            Environment.getExternalStorageDirectory().path + "/Android/data/com.blizzard.wtcg.hearthstone/files/"
+            Environment.getExternalStorageDirectory().path + "/Android/data/${hsPackageName}/files/"
 
         val files = FileService.getInstance()!!.getFiles(path)
         if (!files.contains(path + "log.config") || !files.contains(path + "client.config")) {
@@ -58,7 +75,12 @@ internal fun PermissionsRoute(next: (String) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PermissionsScreen(next: suspend () -> Unit = {}) {
+private fun PermissionsScreen(
+    currentHsPackage: HsPackage,
+    setCurrentHsPackage: (HsPackage) -> Unit,
+
+    next: suspend () -> Unit = {}
+) {
     Scaffold(topBar = {
         TopAppBar(title = { Text("Android14 Shizuku授权") })
     }) { paddingValues ->
@@ -137,7 +159,7 @@ private fun PermissionsScreen(next: suspend () -> Unit = {}) {
                 )
             }, modifier = Modifier.clickable {
 
-                if(canUse) {
+                if (canUse) {
                     auth =
                         hasPermission()
                     if (!auth) {
@@ -166,6 +188,26 @@ private fun PermissionsScreen(next: suspend () -> Unit = {}) {
                     }
                 }
             })
+
+            ListItem(headlineContent = {
+                Text("炉石来源")
+            })
+
+            HsPackage.entries.forEach {
+                ListItem(
+                    headlineContent = {
+                        Text(it.description)
+                    },
+                    leadingContent = {
+                        RadioButton(
+                            selected = it == currentHsPackage,
+                            onClick = {
+                                setCurrentHsPackage(it)
+                            }
+                        )
+                    }
+                )
+            }
 
             val scope = rememberCoroutineScope()
 
