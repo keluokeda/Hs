@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.ke.hs.module.entity.HsPackage
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.tencent.bugly.crashreport.CrashReport
@@ -45,6 +46,12 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 private val LogsEnable = booleanPreferencesKey("logs_enable")
 
+suspend fun Context.setLogsEnable(enable: Boolean) {
+    dataStore.edit { settings ->
+        settings[LogsEnable] = enable
+    }
+}
+
 /**
  * 日志保存功能是否开启
  */
@@ -55,11 +62,24 @@ val Context.logsEnable: Flow<Boolean>
             preferences[LogsEnable] ?: false
         }
 
-suspend fun Context.setLogsEnable(enable: Boolean) {
-    dataStore.edit { settings ->
-        settings[LogsEnable] = enable
+private val currentHsPackage = intPreferencesKey("current_hs_package")
+
+val Context.currentHsPackage: Flow<HsPackage>
+    get() = this.dataStore.data.map {
+        it[com.ke.hs.currentHsPackage] ?: 1
+    }.map { index ->
+        HsPackage.entries.find {
+            it.index == index
+        }!!
+    }
+
+
+suspend fun Context.setHsPackage(hsPackage: HsPackage) {
+    dataStore.edit {
+        it[com.ke.hs.currentHsPackage] = hsPackage.index
     }
 }
+
 
 private val lastWindowWidthKey = intPreferencesKey("last_window_width")
 
@@ -81,11 +101,12 @@ val String.tileImage
 val String.renderImage
     get() = "https://art.hearthstonejson.com/v1/render/latest/zhCN/512x/$this.png"
 
-fun Context.checkAppInstalled(packageName: String = "com.blizzard.wtcg.hearthstone"): Boolean {
+fun Context.checkAppInstalled(hsPackage: HsPackage = HsPackage.Normal): Boolean {
     return try {
-        this.packageManager.getPackageInfo(packageName, 0)
+        this.packageManager.getPackageInfo(hsPackage.packageName, 0)
         true
     } catch (e: Exception) {
         false
     }
 }
+

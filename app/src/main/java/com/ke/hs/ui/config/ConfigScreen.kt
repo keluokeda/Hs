@@ -28,8 +28,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ke.hs.FileService
 import com.ke.hs.checkAppInstalled
+import com.ke.hs.currentHsPackage
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -81,7 +84,9 @@ private fun ConfigScreen(next: () -> Unit = {}) {
 
 
             Button(onClick = {
-                if (!context.checkAppInstalled()) {
+                if (!context.checkAppInstalled(runBlocking {
+                        context.currentHsPackage.first()
+                    })) {
                     showDialog = true
                     return@Button
                 }
@@ -116,7 +121,7 @@ private suspend fun writeConfig(context: Context, fileName: String) {
     withContext(Dispatchers.IO) {
         val manager = FileService.getInstance() ?: return@withContext
         val path =
-            Environment.getExternalStorageDirectory().path + "/Android/data/com.blizzard.wtcg.hearthstone/files/"
+            Environment.getExternalStorageDirectory().path + "/Android/data/${context.currentHsPackage.first().packageName}/files/"
 
         val configFile = File(path, fileName)
 

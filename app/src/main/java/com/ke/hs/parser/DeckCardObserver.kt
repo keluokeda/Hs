@@ -3,6 +3,7 @@ package com.ke.hs.parser
 import android.content.Context
 import android.os.Environment
 import com.ke.hs.FileService
+import com.ke.hs.currentHsPackage
 
 import com.ke.hs.logsEnable
 import com.ke.hs.module.db.GameDao
@@ -27,9 +28,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -130,8 +133,12 @@ class DeckCardObserverImpl @Inject constructor(
     }
 
     private fun findLogDir(): String? {
+        val hsPackage = runBlocking {
+            context.currentHsPackage.first()
+        }
+
         val logsDir =
-            Environment.getExternalStorageDirectory().path + "/Android/data/com.blizzard.wtcg.hearthstone/files/Logs"
+            Environment.getExternalStorageDirectory().path + "/Android/data/${hsPackage.packageName}/files/Logs"
 
 
         val listFiles =
