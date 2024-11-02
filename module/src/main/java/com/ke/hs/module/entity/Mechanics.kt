@@ -408,7 +408,11 @@ enum class Mechanics {
 
     MINIATURIZE,
 
-    GIGANTIFY
+    GIGANTIFY,
+
+    STARSHIPPIECE,
+
+    STARSHIP
 }
 
 

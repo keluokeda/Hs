@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.ke.hs.module.ModuleApplication
 import com.ke.hs.module.entity.HsPackage
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -21,7 +22,7 @@ import kotlinx.coroutines.flow.map
 
 
 @HiltAndroidApp
-class MainApplication : Application() {
+class MainApplication : ModuleApplication() {
 
     override fun onCreate() {
         super.onCreate()

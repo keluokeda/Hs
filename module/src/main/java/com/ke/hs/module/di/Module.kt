@@ -2,6 +2,8 @@ package com.ke.hs.module.di
 
 import android.content.Context
 import androidx.room.Room
+import com.huawei.agconnect.AGConnectInstance
+import com.huawei.agconnect.AGConnectOptions
 import com.ke.hs.module.api.HearthStoneJsonApi
 import com.ke.hs.module.db.CardDao
 import com.ke.hs.module.db.Database

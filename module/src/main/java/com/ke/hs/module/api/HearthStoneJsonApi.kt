@@ -4,6 +4,7 @@ import com.ke.hs.module.entity.Card
 import retrofit2.http.GET
 import retrofit2.http.Path
 
+
 interface HearthStoneJsonApi {
 
 
