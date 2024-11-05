@@ -4,6 +4,8 @@ package com.ke.hs.module.parser
 import android.os.Looper
 import com.ke.hs.module.entity.CurrentDeck
 import com.orhanobut.logger.Logger
+import com.tencent.rdelivery.util.BuglyHelper
+import com.tencent.upgrade.report.Bugly
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -54,7 +56,10 @@ class DeckFileObserver constructor(
             return null
         }
         val contentList = list.map {
-            it.removeTime().third
+            val tripe = it.removeTime() ?: return null
+
+            return@map tripe.third
+
         }
         val name = contentList.findLast {
             it.startsWith("###", true)
@@ -73,7 +78,10 @@ class DeckFileObserver constructor(
 }
 
 
-fun String.removeTime(): Triple<String, Date, String> {
+private fun String.removeTime(): Triple<String, Date, String>? {
+    if (this.length <= PowerParserImpl.TIME_PREFIX_SIZE) {
+        return null
+    }
 
     val content = substring(PowerParserImpl.TIME_PREFIX_SIZE)
     val start = substring(0, 1)

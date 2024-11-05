@@ -17,9 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.ke.hs.FileService
 import com.ke.hs.R
+import com.ke.hs.parser.FileTextProviderImpl
+import com.ke.hs.parser.HsLogFile
 import com.ke.hs.setWindowWidth
 import com.ke.hs.ui.theme.HsTheme
+import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.upgrade.core.DefaultUpgradeStrategyRequestCallback
 import com.tencent.upgrade.core.UpgradeManager
 import kotlinx.coroutines.runBlocking
@@ -129,6 +133,15 @@ private fun SettingsScreen(
                             context.setWindowWidth(context.resources.getDimensionPixelSize(R.dimen.module_floating_window_width))
 
                         }
+                    })
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { Text(text = "上报卡组数据") },
+                    modifier = Modifier.clickable {
+                        val fileString = FileTextProviderImpl(context).provide(HsLogFile.Deck)
+                        throw RuntimeException(fileString ?: "fileString")
                     })
             }
         }

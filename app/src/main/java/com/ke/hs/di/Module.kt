@@ -2,6 +2,8 @@ package com.ke.hs.di
 
 import com.ke.hs.module.parser.DeckCardObserver
 import com.ke.hs.parser.DeckCardObserverImpl
+import com.ke.hs.parser.FileTextProvider
+import com.ke.hs.parser.FileTextProviderImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -92,4 +94,8 @@ class Module {
         deckCardObserverImpl
 
 
+    @Provides
+    fun provideFileTextProvider(fileTextProviderImpl: FileTextProviderImpl): FileTextProvider {
+        return fileTextProviderImpl
+    }
 }
