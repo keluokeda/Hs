@@ -2,9 +2,8 @@ package com.ke.hs.module.di
 
 import android.content.Context
 import androidx.room.Room
-import com.huawei.agconnect.AGConnectInstance
-import com.huawei.agconnect.AGConnectOptions
 import com.ke.hs.module.api.HearthStoneJsonApi
+import com.ke.hs.module.api.KeApi
 import com.ke.hs.module.db.CardDao
 import com.ke.hs.module.db.Database
 import com.ke.hs.module.db.GameDao
@@ -17,7 +16,6 @@ import com.ke.hs.module.entity.RarityAdapter
 import com.ke.hs.module.entity.SpellSchoolAdapter
 import com.ke.hs.module.parser.BlockTagStack
 import com.ke.hs.module.parser.BlockTagStackImpl
-import com.ke.hs.module.parser.DeckCardObserver
 import com.ke.hs.module.parser.PowerParser
 import com.ke.hs.module.parser.PowerParserImpl
 import com.ke.hs.module.parser.PowerTagHandler
@@ -76,6 +74,18 @@ class Module {
             .create(HearthStoneJsonApi::class.java)
     }
 
+
+    @Provides
+    @Singleton
+    fun provideKeApi(moshi: Moshi): KeApi {
+        return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(provideHttpClient())
+            .baseUrl(KeApi.baseUrl)
+            .build()
+            .create(KeApi::class.java)
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): Database {
@@ -113,8 +123,6 @@ class Module {
     @Provides
     fun providePowerTagHandler(powerTagHandlerImpl: PowerTagHandlerImpl): PowerTagHandler =
         powerTagHandlerImpl
-
-
 
 
 }

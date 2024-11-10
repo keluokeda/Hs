@@ -25,11 +25,11 @@ class SyncViewModel @Inject constructor(
     val loading: StateFlow<Boolean>
         get() = _loading
 
-    suspend fun sync(): Boolean {
+    suspend fun sync(useKeApi: Boolean): Boolean {
         return try {
             _loading.value = true
             cardDao.deleteAll()
-            insertCardListToDatabaseUseCase.execute(getCardListUseCase.execute())
+            insertCardListToDatabaseUseCase.execute(getCardListUseCase.execute(useKeApi))
             _loading.value = false
             true
         } catch (e: Exception) {

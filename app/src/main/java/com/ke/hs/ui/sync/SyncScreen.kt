@@ -8,23 +8,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ke.hs.module.api.HearthStoneJsonApi
+import com.ke.hs.module.api.KeApi
+import com.ke.hs.ui.theme.HsTheme
 import kotlinx.coroutines.launch
 
 
@@ -37,7 +44,7 @@ fun SyncRoute(onBack: (() -> Unit)? = null, next: () -> Unit) {
 
     SyncScreen(loading = loading, onBack = onBack) {
         scope.launch {
-            if (viewModel.sync()) {
+            if (viewModel.sync(it)) {
                 next()
             }
         }
@@ -46,7 +53,11 @@ fun SyncRoute(onBack: (() -> Unit)? = null, next: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: () -> Unit) {
+private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: (Boolean) -> Unit) {
+    var useKeApi = remember {
+        mutableStateOf(false)
+    }
+
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(text = "同步卡牌数据") },
@@ -56,7 +67,10 @@ private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: () 
             } else {
                 {
                     IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null
+                        )
                     }
                 }
 
@@ -70,9 +84,38 @@ private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: () 
                 .padding(16.dp)
         ) {
 
-            Text(text = "数据来源：https://hearthstonejson.com")
+            Text(text = "数据来源：")
+
+            ListItem(
+                leadingContent = {
+                    RadioButton(useKeApi.value == false, onClick = {
+                        useKeApi.value = false
+                    })
+                }, headlineContent = {
+                    Text("官网")
+                }, supportingContent = {
+                    Text(HearthStoneJsonApi.BASE_URL)
+                }
+            )
+
+
+            ListItem(
+                leadingContent = {
+                    RadioButton(useKeApi.value == true, onClick = {
+                        useKeApi.value = true
+                    })
+                }, headlineContent = {
+                    Text("群主")
+                }, supportingContent = {
+                    Text(KeApi.baseUrl)
+                }
+            )
+
+
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = sync, modifier = Modifier.fillMaxWidth(), enabled = !loading) {
+            Button(onClick = {
+                sync(useKeApi.value)
+            }, modifier = Modifier.fillMaxWidth(), enabled = !loading) {
                 Text(text = "同步")
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -85,4 +128,12 @@ private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: () 
     }
 
 
+}
+
+@Composable
+@PreviewLightDark
+private fun SyncScreenPreview() {
+    HsTheme {
+        SyncScreen(loading = false) { }
+    }
 }
