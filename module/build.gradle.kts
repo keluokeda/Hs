@@ -5,7 +5,6 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
     id("androidx.room")
-    id("com.huawei.agconnect")
 }
 
 android {

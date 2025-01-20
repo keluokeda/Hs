@@ -24,8 +24,7 @@ import com.ke.hs.parser.HsLogFile
 import com.ke.hs.setWindowWidth
 import com.ke.hs.ui.theme.HsTheme
 import com.tencent.bugly.crashreport.CrashReport
-import com.tencent.upgrade.core.DefaultUpgradeStrategyRequestCallback
-import com.tencent.upgrade.core.UpgradeManager
+
 import kotlinx.coroutines.runBlocking
 
 
@@ -107,21 +106,7 @@ private fun SettingsScreen(
                         Text(text = com.ke.hs.BuildConfig.VERSION_NAME)
                     },
                     modifier = Modifier.clickable {
-                        UpgradeManager.getInstance()
-                            .checkUpgrade(
-                                false,
-                                null,
-                                object : DefaultUpgradeStrategyRequestCallback() {
-                                    override fun onReceivedNoStrategy() {
-                                        super.onReceivedNoStrategy()
-//                                    Logger.d("onReceivedNoStrategy")
-                                        Toast.makeText(
-                                            context.applicationContext,
-                                            "已是最新版本",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-                                })
+
                     })
             }
 

@@ -4,16 +4,17 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.ke.hs"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.ke.hs"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 24
         versionName = "1.2.4"
 
@@ -53,7 +54,6 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        compose = true
         aidl = true
     }
     composeOptions {
@@ -111,7 +111,7 @@ dependencies {
     implementation ("com.tencent.bugly:crashreport:latest.release")
     implementation("androidx.datastore:datastore-preferences:1.1.0")
 //    implementation("com.tencent.shiply:upgrade:2.0.0-RC01")
-    implementation("com.tencent.shiply:upgrade:2.1.5-RC01")
-    implementation("com.tencent.shiply:upgrade-ui:2.1.5-RC01") // 弹框ui相关，业务方如果自己自定义弹框，可以不依赖
+//    implementation("com.tencent.shiply:upgrade:2.1.5-RC01")
+//    implementation("com.tencent.shiply:upgrade-ui:2.1.5-RC01") // 弹框ui相关，业务方如果自己自定义弹框，可以不依赖
 
 }

@@ -13,8 +13,6 @@ import com.ke.hs.module.entity.HsPackage
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.tencent.bugly.crashreport.CrashReport
-import com.tencent.upgrade.bean.UpgradeConfig
-import com.tencent.upgrade.core.UpgradeManager
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.internal.Contexts.getApplication
 import kotlinx.coroutines.flow.Flow
@@ -35,10 +33,6 @@ class MainApplication : ModuleApplication() {
         CrashReport.initCrashReport(this, "741b982487", BuildConfig.DEBUG)
         CrashReport.setDeviceModel(this, android.os.Build.MODEL)
 
-        val builder: UpgradeConfig.Builder = UpgradeConfig.Builder()
-        val config =
-            builder.appId("3ac98d0c6e").appKey("9da99ab4-63b5-4493-9a0a-4226a67bcb7c").build()
-        UpgradeManager.getInstance().init(this, config)
     }
 }
 

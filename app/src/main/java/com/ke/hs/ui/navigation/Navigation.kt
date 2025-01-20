@@ -14,7 +14,6 @@ import com.ke.hs.ui.main.MainRoute
 import com.ke.hs.ui.permissions.PermissionsRoute
 import com.ke.hs.ui.settings.SettingsRoute
 import com.ke.hs.ui.sync.SyncRoute
-import com.tencent.bugly.crashreport.CrashReport
 
 @Composable
 internal fun NavigationTree(controller: NavHostController) {

@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -54,7 +55,7 @@ fun SyncRoute(onBack: (() -> Unit)? = null, next: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: (Boolean) -> Unit) {
-    var useKeApi = remember {
+    var useKeApi by remember {
         mutableStateOf(false)
     }
 
@@ -88,8 +89,8 @@ private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: (Bo
 
             ListItem(
                 leadingContent = {
-                    RadioButton(useKeApi.value == false, onClick = {
-                        useKeApi.value = false
+                    RadioButton(!useKeApi, onClick = {
+                        useKeApi = false
                     })
                 }, headlineContent = {
                     Text("官网")
@@ -101,9 +102,9 @@ private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: (Bo
 
             ListItem(
                 leadingContent = {
-                    RadioButton(useKeApi.value == true, onClick = {
-                        useKeApi.value = true
-                    })
+                    RadioButton(useKeApi, onClick = {
+                        useKeApi = true
+                    }, enabled = false)
                 }, headlineContent = {
                     Text("群主")
                 }, supportingContent = {
@@ -114,7 +115,7 @@ private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: (Bo
 
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
-                sync(useKeApi.value)
+                sync(useKeApi)
             }, modifier = Modifier.fillMaxWidth(), enabled = !loading) {
                 Text(text = "同步")
             }

@@ -1,20 +1,20 @@
 [versions]
-agp = "8.4.0"
+agp = "8.8.0"
 hiltCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
-kotlin = "1.9.0"
-coreKtx = "1.13.0"
+kotlin = "2.0.0"
+coreKtx = "1.15.0"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.7.0"
-activityCompose = "1.9.0"
-composeBom = "2024.04.01"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.10.0"
+composeBom = "2025.01.00"
 jetbrainsKotlinJvm = "1.9.23"
 hilt ="2.51.1"
 logger = "2.2.0"
 moshiKotlin = "1.15.1"
-navigationCompose = "2.7.7"
+navigationCompose = "2.8.5"
 retrofit = "2.9.0"
 roomRuntime = "2.6.1"
 shizuku="13.1.5"
@@ -64,4 +64,5 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 androidHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

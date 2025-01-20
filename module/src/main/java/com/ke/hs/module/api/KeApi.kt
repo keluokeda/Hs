@@ -7,7 +7,7 @@ interface KeApi {
     @GET("cards")
     suspend fun cards(): List<Card>
 
-    companion object{
-        const val baseUrl  = "https://ke-api.cpolar.top/"
+    companion object {
+        const val baseUrl = "https://ke-api.cpolar.top/"
     }
 }
