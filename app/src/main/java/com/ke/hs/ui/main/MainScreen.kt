@@ -11,6 +11,8 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -19,10 +21,14 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +45,7 @@ import com.ke.hs.ui.main.decks.DecksRoute
 import com.ke.hs.ui.main.records.RecordsRoute
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainRoute(
     toSummaryChart: () -> Unit = {},
@@ -51,18 +58,14 @@ fun MainRoute(
 
     val records by viewModel.records.collectAsState()
     val deckSummaryList by viewModel.deckSummaryList.collectAsState()
+
+    var showFloatingWindowPermissionDialog by remember { mutableStateOf(false) }
     MainScreen(
         start = {
             if (Settings.canDrawOverlays(context)) {
                 context.startService(Intent(context, ComposeWindowService::class.java))
             } else {
-                (context as Activity).startActivityForResult(
-                    Intent(
-                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:${context.packageName}")
-                    ),
-                    101
-                )
+                showFloatingWindowPermissionDialog = true
             }
         },
         toSummaryChart = toSummaryChart,
@@ -71,6 +74,35 @@ fun MainRoute(
         records = records,
         deckSummaryList = deckSummaryList
     )
+
+    if (showFloatingWindowPermissionDialog) {
+        AlertDialog(onDismissRequest = {
+            showFloatingWindowPermissionDialog = false
+        }, confirmButton = {
+            TextButton(onClick = {
+                (context as Activity).startActivityForResult(
+                    Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:${context.packageName}")
+                    ),
+                    101
+                )
+                showFloatingWindowPermissionDialog = false
+            }) {
+                Text("去打开")
+            }
+        }, dismissButton = {
+            TextButton(onClick = {
+                showFloatingWindowPermissionDialog = false
+            }) {
+                Text("取消")
+            }
+        }, title = {
+            Text("提示")
+        }, text = {
+            Text("请为炉石记牌器打开悬浮窗权限")
+        })
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
