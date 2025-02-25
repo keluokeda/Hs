@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -191,6 +193,21 @@ private fun PermissionsScreen(
 
             ListItem(headlineContent = {
                 Text("炉石来源")
+            }, trailingContent = {
+                TextButton(onClick = {
+
+
+                    val hsPackage = findHsPackage(context)
+                    if (hsPackage == null) {
+                        Toast.makeText(context, "未发现炉石app", Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        setCurrentHsPackage(hsPackage)
+                    }
+
+                }) {
+                    Text("自动检测")
+                }
             })
 
             HsPackage.entries.forEach {
@@ -228,6 +245,20 @@ private fun PermissionsScreen(
         }
     }
 
+}
+
+private fun findHsPackage(context: Context): HsPackage? {
+    HsPackage.entries.forEach {
+        try {
+            context.packageManager.getPackageInfo(it.packageName, 0)
+            return it
+        } catch (e: Exception) {
+
+        }
+
+    }
+
+    return null
 }
 
 private fun isShizukuInstalled(context: Context): Boolean {
