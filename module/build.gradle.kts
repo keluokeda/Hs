@@ -87,10 +87,10 @@ dependencies {
     implementation ("com.tencent.bugly:crashreport:latest.release")
     implementation("androidx.datastore:datastore-preferences:1.1.0")
 //    implementation("com.tencent.shiply:upgrade:2.0.0-RC01")
-    implementation("com.tencent.shiply:upgrade:2.1.5-RC01")
-    implementation("com.tencent.shiply:upgrade-ui:2.1.5-RC01") // 弹框ui相关，业务方如果自己自定义弹框，可以不依赖
+//    implementation("com.tencent.shiply:upgrade:2.1.5-RC01")
+//    implementation("com.tencent.shiply:upgrade-ui:2.1.5-RC01") // 弹框ui相关，业务方如果自己自定义弹框，可以不依赖
 
-    implementation ("com.huawei.agconnect:agconnect-core:1.9.1.300")
-    implementation ("com.huawei.agconnect:agconnect-remoteconfig-ktx:1.9.1.300")
+//    implementation ("com.huawei.agconnect:agconnect-core:1.9.1.300")
+//    implementation ("com.huawei.agconnect:agconnect-remoteconfig-ktx:1.9.1.300")
 //    implementation("com.huawei.agconnect:agconnect-remoteconfig:1.9.1.302")
 }

@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import rikka.shizuku.Shizuku
+import androidx.core.net.toUri
 
 
 @Composable
@@ -123,7 +124,7 @@ private fun PermissionsScreen(
                         .setNeutralButton("打开浏览器下载") { _, _ ->
                             //打开浏览器下载
                             val url = "https://shizuku.rikka.app/zh-hans/"
-                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                            context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
 
                         }
 

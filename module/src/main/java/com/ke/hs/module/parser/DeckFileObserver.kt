@@ -4,8 +4,7 @@ package com.ke.hs.module.parser
 import android.os.Looper
 import com.ke.hs.module.entity.CurrentDeck
 import com.orhanobut.logger.Logger
-import com.tencent.rdelivery.util.BuglyHelper
-import com.tencent.upgrade.report.Bugly
+
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

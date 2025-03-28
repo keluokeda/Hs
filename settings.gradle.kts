@@ -1,9 +1,9 @@
 pluginManagement {
     repositories {
         maven { url=uri ("https://www.jitpack.io")}
-        maven {
-            url = uri("https://developer.huawei.com/repo/")
-        }
+//        maven {
+//            url = uri("https://developer.huawei.com/repo/")
+//        }
 //        maven { url=uri ("https://maven.aliyun.com/repository/releases")}
 //        maven { url=uri ("https://maven.aliyun.com/repository/google")}
 //        maven { url=uri ("https://maven.aliyun.com/repository/central")}
@@ -26,7 +26,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url=uri ("https://tencent-tds-maven.pkg.coding.net/repository/shiply/repo")}
+//        maven { url=uri ("https://tencent-tds-maven.pkg.coding.net/repository/shiply/repo")}
         maven { url=uri ("https://www.jitpack.io")}
 //        maven { url=uri ("https://maven.aliyun.com/repository/releases")}
 //        maven { url=uri ("https://maven.aliyun.com/repository/google")}
