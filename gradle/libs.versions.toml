@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 hiltCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 kotlin = "2.0.0"
