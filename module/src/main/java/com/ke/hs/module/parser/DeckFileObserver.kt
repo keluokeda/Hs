@@ -21,11 +21,17 @@ class DeckFileObserver constructor(
     private var oldLogSize = 0L
 
 
-    fun reset() {
-        oldLogSize = 0
+//    fun reset() {
+//        oldLogSize = 0
+//    }
+
+    suspend fun initOldSize() {
+        val oldText = deckFileTextProvider() ?: ""
+        oldLogSize = oldText.length.toLong()
+        Logger.d("初始化跳过的长度是 $oldLogSize")
     }
 
-    suspend fun start(): Flow<CurrentDeck> = flow {
+    fun start(): Flow<CurrentDeck> = flow {
 
         if (Thread.currentThread() == Looper.getMainLooper().thread) {
             throw RuntimeException("不能运行在主线程")

@@ -25,6 +25,8 @@ class ParseDeckCodeUseCase
             byteList.add(it)
         }
 
+        Logger.d("deck code = $parameters")
+
         val keep = byteList.removeFirst()//移除第一个保留的字段
 //            assert(byteList.removeFirst().toInt() == 0)
 //            assert(byteList.removeFirst().toInt() != 0)//总是1

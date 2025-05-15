@@ -5,6 +5,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
     alias(libs.plugins.compose.compiler)
+    id("com.google.devtools.ksp")
+
 }
 
 android {
@@ -13,10 +15,10 @@ android {
 
     defaultConfig {
         applicationId = "com.ke.hs"
-        minSdk = 26
+        minSdk = 30
         targetSdk = 35
-        versionCode = 24
-        versionName = "1.2.4"
+        versionCode = 30
+        versionName = "1.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -85,9 +87,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
-    implementation(libs.shizuku.api)
-    implementation(libs.shizuku.provider)
+//
+//    implementation(libs.shizuku.api)
+//    implementation(libs.shizuku.provider)
     implementation(libs.logger)
 
     implementation(libs.hilt.android)
@@ -98,11 +100,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.retrofit)
-    implementation(libs.moshi.kotlin)
-    implementation(libs.moshi)
-    kapt(libs.moshi.kotlin.codegen)
-
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+//    implementation(libs.moshi.kotlin)
+//    implementation(libs.moshi)
+//    ksp(libs.moshi.kotlin.codegen)
+//
+//    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("androidx.lifecycle:lifecycle-service:2.7.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.material:material-icons-extended")

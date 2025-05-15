@@ -1,10 +1,8 @@
 package com.ke.hs.parser
 
 import android.content.Context
-import android.os.Environment
-import com.ke.hs.FileService
+import com.ke.hs.bugDataPrefix
 import com.ke.hs.currentHsPackage
-
 import com.ke.hs.logsEnable
 import com.ke.hs.module.db.GameDao
 import com.ke.hs.module.db.entity.Game
@@ -118,9 +116,9 @@ class DeckCardObserverImpl @Inject constructor(
                 return null
             }
 
-            FileService.getInstance()!!.copyFile(
-                "$logDir/$fileName",
-                File(context.getExternalFilesDir(null), fileName).path
+
+            File("$logDir/$fileName").copyTo(
+                File(context.getExternalFilesDir(null), fileName), overwrite = true
             )
 
 
@@ -138,23 +136,19 @@ class DeckCardObserverImpl @Inject constructor(
         }
 
         val logsDir =
-            Environment.getExternalStorageDirectory().path + "/Android/data/${hsPackage.packageName}/files/Logs"
+            bugDataPrefix + "/${hsPackage.packageName}/files/Logs"
 
 
         val listFiles =
-            FileService.getInstance()?.getFiles(
-                logsDir
-            ) ?: return null
+            File(logsDir).listFiles()!!
 
 
         val logDir = listFiles.filter {
-            it.contains("Hearthstone")
+            it.name.contains("Hearthstone")
         }.maxByOrNull {
-            FileService.getInstance()!!.lastModified(
-                it
-            )
+            it.lastModified()
         }
-        return logDir
+        return logDir?.path
     }
 
     /**
@@ -204,6 +198,7 @@ class DeckCardObserverImpl @Inject constructor(
         }
 
         scope.launch {
+//            deckFileObserver.initOldSize()
             //监听牌库
             delay(1000)
             deckFileObserver
@@ -236,9 +231,9 @@ class DeckCardObserverImpl @Inject constructor(
 
 
                         if (saveLogFile) {
-                            saveLogFileToLocal(it.game)
+//                            saveLogFileToLocal(it.game)
                         } else {
-                            clearPowerLogFile()
+//                            clearPowerLogFile()
                         }
 
 
@@ -257,9 +252,7 @@ class DeckCardObserverImpl @Inject constructor(
                         }
 
 
-
-
-                        powerFileObserver.reset()
+//                        powerFileObserver.reset()
                     }
 
                     GameEvent.OnGameStart -> {
@@ -303,6 +296,8 @@ class DeckCardObserverImpl @Inject constructor(
 
 
         scope.launch {
+            powerFileObserver.initOldSize()
+            delay(1000)
 
             powerFileObserver.start()
                 .flowOn(Dispatchers.IO)
@@ -370,7 +365,7 @@ class DeckCardObserverImpl @Inject constructor(
 //        logFile.copyTo(target, overwrite = true)
 
         File(context.getExternalFilesDir(null), "Power.log")
-            .copyTo(target)
+            .copyTo(target, overwrite = true)
 //        Log.d("log",text)
 //        target.writeText(text)
         clearLocalLogFile()
@@ -403,7 +398,8 @@ class DeckCardObserverImpl @Inject constructor(
     }
 
     private fun clearHsLogFile(logDir: String) {
-        FileService.getInstance()!!.clearFile(File(logDir, "Power.log").path)
+//        FileService.getInstance()!!.clearFile(File(logDir, "Power.log").path)
+//        File(logDir, "Power.log").writeText("")
     }
 
     override fun analytics(): String {
@@ -413,12 +409,13 @@ class DeckCardObserverImpl @Inject constructor(
             val logDir = findLogDir()
             appendLine("logDir $logDir")
             if (logDir != null) {
-                val time = FileService.getInstance()!!.lastModified(logDir)
+                val file = File(logDir)
+                val time = file.lastModified()
                 appendLine("最后修改时间 ${simpleDateFormat.format(Date(time))}")
 
                 appendLine(
                     "文件大小 ${
-                        FileService.getInstance()!!.fileSize("$logDir/Power.log")
+                        file.length()
                     }"
                 )
             }

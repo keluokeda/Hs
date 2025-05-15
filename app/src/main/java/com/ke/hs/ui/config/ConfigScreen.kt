@@ -1,15 +1,11 @@
 package com.ke.hs.ui.config
 
 import android.content.Context
-import android.os.Environment
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.ke.hs.FileService
+import com.ke.hs.bugDataPrefix
 import com.ke.hs.checkAppInstalled
 import com.ke.hs.currentHsPackage
 import kotlinx.coroutines.Dispatchers
@@ -119,18 +115,24 @@ private fun ConfigScreen(next: () -> Unit = {}) {
 
 private suspend fun writeConfig(context: Context, fileName: String) {
     withContext(Dispatchers.IO) {
-        val manager = FileService.getInstance() ?: return@withContext
+//        val manager = FileService.getInstance() ?: return@withContext
         val path =
-            Environment.getExternalStorageDirectory().path + "/Android/data/${context.currentHsPackage.first().packageName}/files/"
+            bugDataPrefix + "/${context.currentHsPackage.first().packageName}/files/"
 
         val configFile = File(path, fileName)
 
-        manager.deleteFile(configFile.path)
+//        manager.deleteFile(configFile.path)
+        if (configFile.exists()) {
+            configFile.delete()
+        }
+        configFile.createNewFile()
+//        context.assets.open(fileName).reader()
         val localConfigFile = File(context.getExternalFilesDir(null), fileName)
         localConfigFile.outputStream().use {
             context.assets.open(fileName).copyTo(it)
             it.flush()
         }
-        manager.copyFile(localConfigFile.path, configFile.path)
+//        manager.copyFile(localConfigFile.path, configFile.path)
+        localConfigFile.copyTo(configFile,overwrite = true)
     }
 }

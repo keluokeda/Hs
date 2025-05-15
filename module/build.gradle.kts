@@ -5,6 +5,9 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
     id("androidx.room")
+    id("com.google.devtools.ksp")
+    kotlin("plugin.serialization") version "2.0.21"
+
 }
 
 android {
@@ -57,8 +60,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    implementation(libs.shizuku.api)
-    implementation(libs.shizuku.provider)
+//    implementation(libs.shizuku.api)
+//    implementation(libs.shizuku.provider)
     implementation(libs.logger)
 
     implementation(libs.hilt.android)
@@ -67,7 +70,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     // To use Kotlin annotation processing tool (kapt)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     // optional - Paging 3 Integration
     implementation(libs.androidx.room.paging)
 
@@ -76,10 +79,11 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.moshi.kotlin)
     implementation(libs.moshi)
-    kapt(libs.moshi.kotlin.codegen)
-
+    ksp(libs.moshi.kotlin.codegen)
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+    implementation(libs.converter.kotlinx.serialization)
+
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("co.yml:ycharts:2.1.0")

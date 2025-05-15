@@ -17,12 +17,15 @@ class PowerFileObserver(
 ) {
     private var oldLogSize = 0L
 
-    fun reset() {
-        oldLogSize = 0
+
+    suspend fun initOldSize() {
+        val oldText = fileInputStreamProvider() ?: ""
+        oldLogSize = oldText.length.toLong()
+        Logger.d("初始化跳过的长度是 $oldLogSize")
     }
 
 
-    suspend fun start(): Flow<List<String>> = flow {
+    fun start(): Flow<List<String>> = flow {
         if (Thread.currentThread() == Looper.getMainLooper().thread) {
             throw RuntimeException("不能运行在主线程")
         }

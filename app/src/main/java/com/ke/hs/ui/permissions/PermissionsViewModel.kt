@@ -1,6 +1,9 @@
 package com.ke.hs.ui.permissions
 
 import android.content.Context
+import android.os.Environment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ke.hs.currentHsPackage
@@ -9,7 +12,9 @@ import com.ke.hs.module.entity.HsPackage
 import com.ke.hs.setHsPackage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +23,17 @@ import javax.inject.Inject
 class PermissionsViewModel @Inject constructor(
     private val cardDao: CardDao,
     @ApplicationContext private val context: Context
-) : ViewModel() {
+) : ViewModel(), DefaultLifecycleObserver {
+
+    private val _hasPermission = MutableStateFlow(false)
+
+    internal val hasPermission = _hasPermission.asStateFlow()
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        _hasPermission.value = Environment.isExternalStorageManager()
+    }
+
 
     suspend fun hasCardData(): Boolean {
         return cardDao.getCount() > 0

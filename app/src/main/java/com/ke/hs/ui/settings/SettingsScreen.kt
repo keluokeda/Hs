@@ -1,6 +1,5 @@
 package com.ke.hs.ui.settings
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,14 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import com.ke.hs.FileService
 import com.ke.hs.R
 import com.ke.hs.parser.FileTextProviderImpl
 import com.ke.hs.parser.HsLogFile
 import com.ke.hs.setWindowWidth
 import com.ke.hs.ui.theme.HsTheme
-import com.tencent.bugly.crashreport.CrashReport
-
 import kotlinx.coroutines.runBlocking
 
 
