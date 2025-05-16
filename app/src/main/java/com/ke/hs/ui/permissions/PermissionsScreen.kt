@@ -60,7 +60,7 @@ internal fun PermissionsRoute(next: (String) -> Unit) {
         val path =
             "/storage/emulated/0/${zeroWidthSpace}Android/data/${hsPackageName}/files/"
 //            Environment.getExternalStorageDirectory().path + "/Android/data/${hsPackageName}/files/"
-        val listFiles = File(path).listFiles().map { it.path }
+        val listFiles = File(path).listFiles()?.map { it.path } ?: emptyList()
 
 //        val files = FileService.getInstance()!!.getFiles(path)
         if (!listFiles.contains(path + "log.config") || !listFiles.contains(path + "client.config")) {
