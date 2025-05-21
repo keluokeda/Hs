@@ -105,6 +105,6 @@ fun Context.checkAppInstalled(hsPackage: HsPackage = HsPackage.Normal): Boolean 
     }
 }
 
-private val zeroWidthSpace = "\u200b"
+private const val zeroWidthSpace = "\u200b"
 
 val bugDataPrefix = "/storage/emulated/0/${zeroWidthSpace}Android/data"

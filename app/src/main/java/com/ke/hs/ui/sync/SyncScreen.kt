@@ -100,17 +100,17 @@ private fun SyncScreen(loading: Boolean, onBack: (() -> Unit)? = null, sync: (Bo
             )
 
 
-            ListItem(
-                leadingContent = {
-                    RadioButton(useKeApi, onClick = {
-                        useKeApi = true
-                    }, enabled = false)
-                }, headlineContent = {
-                    Text("群主")
-                }, supportingContent = {
-                    Text(KeApi.baseUrl)
-                }
-            )
+//            ListItem(
+//                leadingContent = {
+//                    RadioButton(useKeApi, onClick = {
+//                        useKeApi = true
+//                    }, enabled = false)
+//                }, headlineContent = {
+//                    Text("群主")
+//                }, supportingContent = {
+//                    Text(KeApi.baseUrl)
+//                }
+//            )
 
 
             Spacer(modifier = Modifier.height(16.dp))

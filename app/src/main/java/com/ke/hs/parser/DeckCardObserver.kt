@@ -140,7 +140,7 @@ class DeckCardObserverImpl @Inject constructor(
 
 
         val listFiles =
-            File(logsDir).listFiles()!!
+            File(logsDir).listFiles() ?: emptyArray()
 
 
         val logDir = listFiles.filter {

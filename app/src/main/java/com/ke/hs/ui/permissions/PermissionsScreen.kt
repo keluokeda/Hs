@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ke.hs.bugDataPrefix
 import com.ke.hs.currentHsPackage
 import com.ke.hs.module.entity.HsPackage
 import kotlinx.coroutines.flow.first
@@ -58,7 +59,7 @@ internal fun PermissionsRoute(next: (String) -> Unit) {
 
 
         val path =
-            "/storage/emulated/0/${zeroWidthSpace}Android/data/${hsPackageName}/files/"
+            "${bugDataPrefix}/${hsPackageName}/files/"
 //            Environment.getExternalStorageDirectory().path + "/Android/data/${hsPackageName}/files/"
         val listFiles = File(path).listFiles()?.map { it.path } ?: emptyList()
 

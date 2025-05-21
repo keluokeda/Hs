@@ -1,6 +1,7 @@
 package com.ke.hs.ui.config
 
 import android.content.Context
+import android.os.Environment
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.ke.hs.bugDataPrefix
 import com.ke.hs.checkAppInstalled
 import com.ke.hs.currentHsPackage
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -63,6 +65,8 @@ private fun ConfigScreen(next: () -> Unit = {}) {
                     .weight(1f)
                     .padding(16.dp)
             ) {
+
+
                 item {
                     Text(
                         text = text,
@@ -119,12 +123,21 @@ private suspend fun writeConfig(context: Context, fileName: String) {
         val path =
             bugDataPrefix + "/${context.currentHsPackage.first().packageName}/files/"
 
+        File(path).apply {
+            if (!exists()) {
+                mkdirs()
+            }
+        }
+
         val configFile = File(path, fileName)
+
 
 //        manager.deleteFile(configFile.path)
         if (configFile.exists()) {
             configFile.delete()
         }
+        Logger.d(Environment.getExternalStorageDirectory().path + " " + configFile.path)
+
         configFile.createNewFile()
 //        context.assets.open(fileName).reader()
         val localConfigFile = File(context.getExternalFilesDir(null), fileName)
@@ -133,6 +146,6 @@ private suspend fun writeConfig(context: Context, fileName: String) {
             it.flush()
         }
 //        manager.copyFile(localConfigFile.path, configFile.path)
-        localConfigFile.copyTo(configFile,overwrite = true)
+        localConfigFile.copyTo(configFile, overwrite = true)
     }
 }

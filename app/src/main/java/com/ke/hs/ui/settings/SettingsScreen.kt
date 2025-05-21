@@ -117,14 +117,14 @@ private fun SettingsScreen(
                     })
             }
 
-            item {
-                ListItem(
-                    headlineContent = { Text(text = "上报卡组数据") },
-                    modifier = Modifier.clickable {
-                        val fileString = FileTextProviderImpl(context).provide(HsLogFile.Deck)
-                        throw RuntimeException(fileString ?: "fileString")
-                    })
-            }
+//            item {
+//                ListItem(
+//                    headlineContent = { Text(text = "上报卡组数据") },
+//                    modifier = Modifier.clickable {
+//                        val fileString = FileTextProviderImpl(context).provide(HsLogFile.Deck)
+//                        throw RuntimeException(fileString ?: "fileString")
+//                    })
+//            }
         }
     }
 }

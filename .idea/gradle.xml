@@ -13,10 +13,10 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/demo" />
             <option value="$PROJECT_DIR$/lib" />
+            <option value="$PROJECT_DIR$/mock" />
             <option value="$PROJECT_DIR$/module" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
