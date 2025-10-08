@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("kotlin-kapt")
+//    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
     alias(libs.plugins.compose.compiler)
@@ -11,14 +11,14 @@ plugins {
 
 android {
     namespace = "com.ke.hs"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.ke.hs"
         minSdk = 30
-        targetSdk = 35
-        versionCode = 34
-        versionName = "1.3.4"
+        targetSdk = 36
+        versionCode = 35
+        versionName = "1.3.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -93,7 +93,7 @@ dependencies {
     implementation(libs.logger)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
 
@@ -105,7 +105,7 @@ dependencies {
 //    ksp(libs.moshi.kotlin.codegen)
 //
 //    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.9.3")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("co.yml:ycharts:2.1.0")

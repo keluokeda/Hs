@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("kotlin-kapt")
+//    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
     id("androidx.room")
@@ -12,7 +12,7 @@ plugins {
 
 android {
     namespace = "com.ke.hs.module"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.logger)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
@@ -80,16 +80,16 @@ dependencies {
     implementation(libs.moshi.kotlin)
     implementation(libs.moshi)
     ksp(libs.moshi.kotlin.codegen)
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+    implementation("com.squareup.retrofit2:converter-moshi:3.0.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.9.3")
     implementation(libs.converter.kotlinx.serialization)
 
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("co.yml:ycharts:2.1.0")
 //    implementation("androidx.compose.material:material:1.6.6")
     implementation ("com.tencent.bugly:crashreport:latest.release")
-    implementation("androidx.datastore:datastore-preferences:1.1.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 //    implementation("com.tencent.shiply:upgrade:2.0.0-RC01")
 //    implementation("com.tencent.shiply:upgrade:2.1.5-RC01")
 //    implementation("com.tencent.shiply:upgrade-ui:2.1.5-RC01") // 弹框ui相关，业务方如果自己自定义弹框，可以不依赖

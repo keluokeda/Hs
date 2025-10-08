@@ -10,6 +10,7 @@ import com.ke.hs.module.entity.ZoneUpdatable
 import com.ke.hs.module.entity.toFormatType
 import com.ke.hs.module.entity.toGameType
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -36,6 +37,7 @@ interface PowerTagHandler {
     val gameEventFlow: Flow<GameEvent?>
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 class PowerTagHandlerImpl @Inject constructor(
     private val getAllCardUseCase: GetAllCardUseCase
 ) : PowerTagHandler {
