@@ -17,8 +17,8 @@ android {
         applicationId = "com.ke.hs"
         minSdk = 30
         targetSdk = 36
-        versionCode = 35
-        versionName = "1.3.5"
+        versionCode = 36
+        versionName = "1.3.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

@@ -44,7 +44,9 @@ enum class Zone {
     /**
      * 奥秘
      */
-    Secret
+    Secret,
+
+    COSMETIC
 }
 
 internal fun String.toZone(fallback: Zone = Zone.Deck): Zone {
